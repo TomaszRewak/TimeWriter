@@ -36,16 +36,29 @@
 
 	_organizeCarets(carets) {
 		const sortedCarets = this._sortCarets(carets);
-		const groupedCarets = this._groupCarets(sortedCarets);
+		const groupedCarets = this._groupSortedCarets(sortedCarets);
 
 		return groupedCarets;
 	}
 
 	_sortCarets(carets) {
-		return carets.sort((a, b) => a.position - b.position);
+		return carets.sort(this._compareCarets);
 	}
 
-	_groupCarets(carets) {
-		return carets;
+	_groupSortedCarets(carets) {
+		const groupedCarets = [];
+
+		for (let i = 0; i < carets.length; i++) {
+			if (i === 0 || this._compareCarets(carets[i - 1], carets[i]) !== 0)
+				groupedCarets.push(carets[i]);
+		}
+
+		return groupedCarets;
+	}
+
+	_compareCarets(caretA, caretB) {
+		return caretA.position !== caretB.position
+			? caretA.position - caretB.position
+			: caretA.owner - caretB.owner;
 	}
 }

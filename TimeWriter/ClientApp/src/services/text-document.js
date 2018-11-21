@@ -6,7 +6,7 @@ export default class TextDocument {
 	constructor() {
 		this._documentState = {
 			carets: [
-				{ owner: 1, position: 10 },
+				{ owner: 1, position: 1 },
 				{ owner: 1, position: 20 },
 				{ owner: 2, position: 50 }
 			],
