@@ -1,8 +1,9 @@
-﻿import React, { Component } from 'react';
+﻿import './_.css';
+
+import React, { Component } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
-import Caret from './caret';
 import TextDocument from '../../services/text-document';
-import TextProcessing from '../../services/text-utils/text-processing';
+import Line from './line';
 
 class Document extends Component {
 	constructor(props) {
@@ -45,26 +46,31 @@ class Document extends Component {
 		});
 	}
 
-	insertCarets(document) {
-		const textParts = TextProcessing.splitText(document.text, document.carets.map(caret => caret.position));
-		const styledTextParts = textParts.map(textPart => <span style={{ whiteSpace: 'pre-wrap' }}>{textPart}</span>);
+	prepareLayout(document) {
+		let lines = document.text.split("\n");
+		lines = lines.map(line => (
+			{
+				text: line,
+				begin: 0,
+				carets: []
+			}));
+		for (let i = 1; i < lines.length; i++)
+			lines[i].begin = lines[i - 1].begin + lines[i - 1].text.length;
+		for (const line of lines)
+			for (const caret of this.state.document.carets)
+				if (caret.position >= line.begin && caret.position < line.begin + line.text.length)
+					line.carets.push(caret);
 
-		const [fistTextPart, ...tailTextParts] = styledTextParts;
+		const wrappedLines = lines.map((line, index) => <Line key={index} number={index + 1} text={line.text} carets={line.carets} begin={line.begin} />);
 
-		return [
-			[fistTextPart],
-			tailTextParts.map(textPart => [
-				<Caret />,
-				textPart
-			])
-		];
+		return wrappedLines;
 	}
 
 	render() {
-		var text = this.insertCarets(this.state.document);
+		var text = this.prepareLayout(this.state.document);
 
 		return (
-			<div tabIndex="0" onKeyDown={this.keyPressed}>
+			<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>
 				<h1>{this.props.id}</h1>
 				<div>
 					{text}
