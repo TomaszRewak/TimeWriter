@@ -1,7 +1,19 @@
 ﻿.document {
+	color: #dddddd;
+	font-family: 'Inconsolata', monospace;
+	background-color: #444444;
+	display: flex;
+	flex-direction: row;
 }
 
-	.document .line {
+	.document .line-numbers {
+		background-color: #222222;
+		text-align: right;
+		padding: 0 5px;
+	}
+
+	.document .document-content .line {
 		display: flex;
 		flex-direction: row;
+		padding: 0 5px;
 	}

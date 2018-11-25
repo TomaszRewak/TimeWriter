@@ -47,16 +47,22 @@ class Document extends Component {
 	}
 
 	render() {
-		var text = this.state
-			.document
-			.lines
-			.map((line, index) => <Line key={line.id} number={index + 1} text={line.text} />);
-
 		return (
-			<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>
+			<div>
 				<h1>{this.props.id}</h1>
-				<div>
-					{text}
+				<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>
+					<div className="line-numbers">
+						{[...Array(this.state.document.lines.length).keys()]
+							.map(i => i + 1)
+							.map(number => <div key={number} className="line-number">{number}</div>)
+						}
+					</div>
+					<div className="document-content">
+						{this.state
+							.document
+							.lines
+							.map((line, index) => <Line key={line.id} line={line} />)}
+					</div>
 				</div>
 			</div>
 		);

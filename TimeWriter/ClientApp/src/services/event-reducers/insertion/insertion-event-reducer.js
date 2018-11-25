@@ -33,70 +33,14 @@ export default class InsertionEventReducer {
 		if (caret.owner !== event.author)
 			return document;
 
-		return this._reduceDocument(document, caret.begin, event.text);
+		return this._reduceDocument(document, caret, event.text);
 	}
 
-	_reduceDocument(document, begin, text) {
+	_reduceDocument(document, caret, text) {
 		return {
 			...document,
-			lines: this._reduceLines(document.lines, begin, text),
-			carets: this._reduceCarets(document.carets, begin, text.length)
+			lines: this._textReducer.reduce(document.lines, caret.begin, text),
+			carets: this._caretReducer.reduce(document.carets, caret.begin, text.length)
 		};
-	}
-
-	_reduceLines(lines, begin, text) {
-		return lines.map((line, lineIndex) => this._reduceLine(line, lineIndex, begin, text));
-	}
-
-	_reduceLine(line, lineIndex, begin, text) {
-		if (lineIndex !== begin.line)
-			return line;
-
-		return {
-			...line,
-			text: this._insertText(line.text, begin.column, text)
-		};
-	}
-
-	_insertText(lineText, column, text) {
-		const firstTextPart = lineText.substring(0, column);
-		const secondTextPart = lineText.substring(column);
-
-		return `${firstTextPart}${text}${secondTextPart}`;
-	}
-
-	_reduceCarets(carets, begin, by) {
-		return carets.map(caret => this._reduceCaret(caret, begin, by));
-	}
-
-	_reduceCaret(caret, start, by) {
-		const newBegin = this._reducePosition(caret.begin, start, by);
-		const newEnd = this._reducePosition(caret.end, start, by);
-
-		if (caret.begin === newBegin && caret.end === newEnd)
-			return caret;
-
-		return {
-			...caret,
-			begin: newBegin,
-			end: newEnd
-		};
-	}
-
-	_reducePosition(position, start, by) {
-		if (this._comparePositions(position, start) < 0)
-			return position;
-
-		return {
-			...position,
-			column: position.column + by
-		};
-	}
-
-	_comparePositions(positionA, positionB) {
-		const lineDiff = Math.sign(positionA.line - positionB.line);
-		const columnDiff = Math.sign(positionA.column - positionB.column);
-
-		return Math.sign(lineDiff * 2 + columnDiff);
 	}
 }

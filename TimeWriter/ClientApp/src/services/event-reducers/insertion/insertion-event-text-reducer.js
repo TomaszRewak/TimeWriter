@@ -6,14 +6,24 @@ export default class InsertionEventTextReducer {
 		this._caretPositionService = new CaretPositionService();
 	}
 
-	reduceText(document, event) {
-		const caretPositions = this._caretPositionService.getActiveCaretPositions(document.carets, event.author);
-		const textParts = TextProcessing.splitText(document.text, caretPositions);
-
-		return this._insertTextBetweenParts(textParts, event.text);
+	reduce(lines, begin, text) {
+		return lines.map((line, lineIndex) => this._reduceLine(line, lineIndex, begin, text));
 	}
 
-	_insertTextBetweenParts(textParts, separator) {
-		return textParts.join(separator);
+	_reduceLine(line, lineIndex, begin, text) {
+		if (lineIndex !== begin.line)
+			return line;
+
+		return {
+			...line,
+			text: this._insertText(line.text, begin.column, text)
+		};
+	}
+
+	_insertText(lineText, column, text) {
+		const firstTextPart = lineText.substring(0, column);
+		const secondTextPart = lineText.substring(column);
+
+		return `${firstTextPart}${text}${secondTextPart}`;
 	}
 }
