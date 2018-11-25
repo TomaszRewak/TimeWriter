@@ -8,6 +8,8 @@ export default class DeletionEventReducer {
 	}
 
 	reduce(document, event) {
+
+
 		return {
 			...document,
 			carets: this._caretReducer.reduceCarets(document, event),

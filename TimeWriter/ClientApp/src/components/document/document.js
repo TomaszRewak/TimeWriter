@@ -46,28 +46,11 @@ class Document extends Component {
 		});
 	}
 
-	prepareLayout(document) {
-		let lines = document.text.split("\n");
-		lines = lines.map(line => (
-			{
-				text: line,
-				begin: 0,
-				carets: []
-			}));
-		for (let i = 1; i < lines.length; i++)
-			lines[i].begin = lines[i - 1].begin + lines[i - 1].text.length;
-		for (const line of lines)
-			for (const caret of this.state.document.carets)
-				if (caret.position >= line.begin && caret.position < line.begin + line.text.length)
-					line.carets.push(caret);
-
-		const wrappedLines = lines.map((line, index) => <Line key={index} number={index + 1} text={line.text} carets={line.carets} begin={line.begin} />);
-
-		return wrappedLines;
-	}
-
 	render() {
-		var text = this.prepareLayout(this.state.document);
+		var text = this.state
+			.document
+			.lines
+			.map((line, index) => <Line key={line.id} number={index + 1} text={line.text} />);
 
 		return (
 			<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>

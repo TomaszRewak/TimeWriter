@@ -9,7 +9,7 @@ export default class EventReducer {
 		this.navigationEventReducer = new NavigationEventReducer();
 	}
 
-	getReducer(event) {
+	_getReducer(event) {
 		switch (event.type) {
 			case 'insert':
 				return this.insertionEventReducer;
@@ -23,7 +23,7 @@ export default class EventReducer {
 	}
 
 	reduce(document, event) {
-		const reducer = this.getReducer(event);
+		const reducer = this._getReducer(event);
 
 		return reducer.reduce(document, event);
 	}
