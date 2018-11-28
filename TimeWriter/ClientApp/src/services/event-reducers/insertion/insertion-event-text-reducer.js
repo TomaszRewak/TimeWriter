@@ -6,24 +6,10 @@ export default class InsertionEventTextReducer {
 		this._caretPositionService = new CaretPositionService();
 	}
 
-	reduce(lines, begin, text) {
-		return lines.map((line, lineIndex) => this._reduceLine(line, lineIndex, begin, text));
-	}
+	reduce(document, event) {
+		const firstTextPart = document.text.substring(0, event.caret.position);
+		const secondTextPart = document.text.substring(event.caret.position);
 
-	_reduceLine(line, lineIndex, begin, text) {
-		if (lineIndex !== begin.line)
-			return line;
-
-		return {
-			...line,
-			text: this._insertText(line.text, begin.column, text)
-		};
-	}
-
-	_insertText(lineText, column, text) {
-		const firstTextPart = lineText.substring(0, column);
-		const secondTextPart = lineText.substring(column);
-
-		return `${firstTextPart}${text}${secondTextPart}`;
+		return `${firstTextPart}${event.text}${secondTextPart}`;
 	}
 }

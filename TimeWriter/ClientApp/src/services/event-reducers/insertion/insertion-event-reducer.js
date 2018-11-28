@@ -8,39 +8,20 @@ export default class InsertionEventReducer {
 	}
 
 	reduce(document, event) {
-		const authorsCarets = this._getAuthorsCarets(document.carets, event.author);
-
-		for (let authorCaret of authorsCarets)
-			document = this._reduceUsingCaret(document, event, authorCaret);
+		for (let caret of document.carets)
+			document = this._reduceUsingCaret(document, { ...event, caret: caret });
 
 		return document;
 	}
 
-	_getAuthorsCarets(carets, author) {
-		return carets
-			.filter(caret => caret.owner === author)
-			.map(caret => caret.id);
-	}
-
-	_getCaret(carets, id) {
-		return carets
-			.find(caret => caret.id === id);
-	}
-
-	_reduceUsingCaret(document, event, caretId) {
-		const caret = this._getCaret(document.carets, caretId);
-
-		if (caret.owner !== event.author)
+	_reduceUsingCaret(document, event) {
+		if (event.author !== event.caret.owner)
 			return document;
 
-		return this._reduceDocument(document, caret, event.text);
-	}
-
-	_reduceDocument(document, caret, text) {
 		return {
 			...document,
-			lines: this._textReducer.reduce(document.lines, caret.begin, text),
-			carets: this._caretReducer.reduce(document.carets, caret.begin, text.length)
+			text: this._textReducer.reduce(document, event),
+			carets: this._caretReducer.reduce(document, event)
 		};
 	}
 }

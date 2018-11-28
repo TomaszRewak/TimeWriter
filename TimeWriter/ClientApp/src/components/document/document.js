@@ -48,12 +48,14 @@ class Document extends Component {
 	}
 
 	render() {
+		var lines = this.state.document.text.split('\n');
+
 		return (
 			<div>
 				<h1>{this.props.id}</h1>
 				<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>
 					<div className="line-numbers">
-						{[...Array(this.state.document.lines.length).keys()]
+						{[...Array(lines.length).keys()]
 							.map(i => i + 1)
 							.map(number => <div key={number} className="line-number">{number}</div>)
 						}
@@ -67,10 +69,7 @@ class Document extends Component {
 								.map(caret => <Caret key={caret.id} caret={caret} />)}
 						</div>
 						<div className="lines">
-							{this.state
-								.document
-								.lines
-								.map(line => <Line key={line.id} line={line} />)}
+							{lines.map(line => <Line key={line.id} text={line} />)}
 						</div>
 					</div>
 				</div>

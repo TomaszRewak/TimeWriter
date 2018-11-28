@@ -5,31 +5,17 @@ export default class InsertionEventCaretReducer {
 		this._caretCascadeNagigationService = new CaretCascadeNavigationService();
 	}
 
-	reduce(carets, position, length) {
-		return carets.map(caret => this._reduceCaret(caret, position, length));
+	reduce(document, event) {
+		return document.carets.map(caret => this._reduceCaret(caret, event));
 	}
 
-	_reduceCaret(caret, position, length) {
-		const begin = this._reduceCaretPosition(caret.begin, position, length);
-		const end = this._reduceCaretPosition(caret.end, position, length);
-
-		if (caret.begin === begin && caret.end === end)
-			return caret;
-
-		return { ...caret, begin, end };
-	}
-
-	_reduceCaretPosition(caret, position, length) {
-		if (!this._isCaretAffected(caret, position))
+	_reduceCaret(caret, event) {
+		if (caret.position < event.caret.position)
 			return caret;
 
 		return {
 			...caret,
-			column: caret.column + length
+			position: caret.position + event.text.length
 		};
-	}
-
-	_isCaretAffected(caret, position) {
-		return caret.line === position.line && caret.column >= position.column;
 	}
 }

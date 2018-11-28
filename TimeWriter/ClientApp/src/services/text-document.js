@@ -6,15 +6,12 @@ export default class TextDocument {
 	constructor() {
 		this._documentState = {
 			carets: [
-				{ id: 0, owner: 1, begin: { line: 2, column: 1 }, end: { line: 0, column: 1 } },
-				{ id: 1, owner: 1, begin: { line: 2, column: 10 }, end: { line: 0, column: 10 } },
-				{ id: 2, owner: 2, begin: { line: 2, column: 5 }, end: { line: 2, column: 7 } },
-				{ id: 2, owner: 2, begin: { line: 4, column: 5 }, end: { line: 2, column: 7 } }
+				{ id: 0, owner: 1, position: 20, length: 0 },
+				{ id: 1, owner: 1, position: 40, length: 0 },
+				{ id: 2, owner: 2, position: 30, length: 0 },
+				{ id: 2, owner: 2, position: 120, length: 0 }
 			],
-			lines: shakspeareSampleText.repeat(10).split('\n').map((line, index) => ({
-				id: index,
-				text: line
-			}))
+			text: shakspeareSampleText.repeat(10)
 		};
 
 		this._eventStore = new EventStore();
