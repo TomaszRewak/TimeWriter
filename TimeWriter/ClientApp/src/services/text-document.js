@@ -8,6 +8,7 @@ export default class TextDocument {
 			carets: [
 				{ id: 0, owner: 1, begin: { line: 2, column: 1 }, end: { line: 0, column: 1 } },
 				{ id: 1, owner: 1, begin: { line: 2, column: 10 }, end: { line: 0, column: 10 } },
+				{ id: 2, owner: 2, begin: { line: 2, column: 5 }, end: { line: 2, column: 7 } },
 				{ id: 2, owner: 2, begin: { line: 4, column: 5 }, end: { line: 2, column: 7 } }
 			],
 			lines: shakspeareSampleText.repeat(10).split('\n').map((line, index) => ({

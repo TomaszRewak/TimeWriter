@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
 import TextDocument from '../../services/text-document';
 import Line from './line';
+import Caret from './caret';
 
 class Document extends Component {
 	constructor(props) {
@@ -58,10 +59,19 @@ class Document extends Component {
 						}
 					</div>
 					<div className="document-content">
-						{this.state
-							.document
-							.lines
-							.map((line, index) => <Line key={line.id} line={line} />)}
+						<div className="carets">
+							_
+							{this.state
+								.document
+								.carets
+								.map(caret => <Caret key={caret.id} caret={caret} />)}
+						</div>
+						<div className="lines">
+							{this.state
+								.document
+								.lines
+								.map(line => <Line key={line.id} line={line} />)}
+						</div>
 					</div>
 				</div>
 			</div>

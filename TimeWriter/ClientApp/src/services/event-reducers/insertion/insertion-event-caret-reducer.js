@@ -5,38 +5,31 @@ export default class InsertionEventCaretReducer {
 		this._caretCascadeNagigationService = new CaretCascadeNavigationService();
 	}
 
-	reduce(carets, begin, by) {
-		return carets.map(caret => this._reduceCaret(caret, begin, by));
+	reduce(carets, position, length) {
+		return carets.map(caret => this._reduceCaret(caret, position, length));
 	}
 
-	_reduceCaret(caret, start, by) {
-		const newBegin = this._reducePosition(caret.begin, start, by);
-		const newEnd = this._reducePosition(caret.end, start, by);
+	_reduceCaret(caret, position, length) {
+		const begin = this._reduceCaretPosition(caret.begin, position, length);
+		const end = this._reduceCaretPosition(caret.end, position, length);
 
-		if (caret.begin === newBegin && caret.end === newEnd)
+		if (caret.begin === begin && caret.end === end)
+			return caret;
+
+		return { ...caret, begin, end };
+	}
+
+	_reduceCaretPosition(caret, position, length) {
+		if (!this._isCaretAffected(caret, position))
 			return caret;
 
 		return {
 			...caret,
-			begin: newBegin,
-			end: newEnd
+			column: caret.column + length
 		};
 	}
 
-	_reducePosition(position, start, by) {
-		if (this._comparePositions(position, start) < 0)
-			return position;
-
-		return {
-			...position,
-			column: position.column + by
-		};
-	}
-
-	_comparePositions(positionA, positionB) {
-		const lineDiff = Math.sign(positionA.line - positionB.line);
-		const columnDiff = Math.sign(positionA.column - positionB.column);
-
-		return Math.sign(lineDiff * 2 + columnDiff);
+	_isCaretAffected(caret, position) {
+		return caret.line === position.line && caret.column >= position.column;
 	}
 }

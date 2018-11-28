@@ -16,7 +16,6 @@ export default class Line extends Component {
 		return (
 			<div className="line">
 				{text}
-				<span>{Math.random()}</span>
 			</div>
 		);
 	}

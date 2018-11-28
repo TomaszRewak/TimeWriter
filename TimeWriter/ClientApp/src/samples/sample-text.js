@@ -1,5 +1,4 @@
-﻿const shakspeareSampleText = `
-Peace, ho, for shame! confusion's cure lives not
+﻿const shakspeareSampleText = `Peace, ho, for shame! confusion's cure lives not
 In these confusions. Heaven and yourself
 Had part in this fair maid; now heaven hath all,
 And all the better is it for the maid:

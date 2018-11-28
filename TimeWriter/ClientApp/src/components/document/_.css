@@ -1,6 +1,7 @@
 ﻿.document {
 	color: #dddddd;
 	font-family: 'Inconsolata', monospace;
+	font-size: 14px;
 	background-color: #444444;
 	display: flex;
 	flex-direction: row;
@@ -9,11 +10,28 @@
 	.document .line-numbers {
 		background-color: #222222;
 		text-align: right;
-		padding: 0 5px;
+		padding: 5px;
 	}
 
-	.document .document-content .line {
-		display: flex;
-		flex-direction: row;
-		padding: 0 5px;
+	.document .document-content {
+		position: relative;
+		padding: 5px;
 	}
+
+		.document .document-content .lines {
+		}
+
+		.document .document-content .lines .line {
+			display: flex;
+			flex-direction: row;
+		}
+
+		.document .document-content .carets {
+			position: absolute;
+		}
+
+			.document .document-content .carets .caret {
+				position: absolute;
+				width: 2px;
+				height: 100%;
+			}
