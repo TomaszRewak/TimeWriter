@@ -8,8 +8,8 @@ export default class InsertionEventReducer {
 	}
 
 	reduce(document, event) {
-		for (let caret of document.carets)
-			document = this._reduceUsingCaret(document, { ...event, caret: caret });
+		for (let caret in document.carets)
+			document = this._reduceUsingCaret(document, { ...event, caret: document.carets[caret] });
 
 		return document;
 	}

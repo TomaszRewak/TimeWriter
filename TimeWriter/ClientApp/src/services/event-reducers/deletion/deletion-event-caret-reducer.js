@@ -1,14 +1,15 @@
-﻿import CaretCascadeNavigationService from "../../document-navigation/caret-cascade-navigation-service";
-
-export default class DeletionEventCaretReducer {
-	constructor() {
-		this._caretCascadeNagigationService = new CaretCascadeNavigationService();
+﻿export default class DeletionEventCaretReducer {
+	reduce(document, event) {
+		return document.carets.map(caret => this._reduceCaret(caret, event));
 	}
 
-	reduceCarets(document, event) {
-		return this._caretCascadeNagigationService.moveAuthorsCarets(
-			document.carets,
-			event.author,
-			-event.length);
+	_reduceCaret(caret, event) {
+		if (caret.position < event.caret.position)
+			return caret;
+
+		return {
+			...caret,
+			position: caret.position - event.length
+		};
 	}
 }

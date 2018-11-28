@@ -1,19 +1,18 @@
-﻿import CaretUniformNavigationService from "../../document-navigation/caret-uniform-navigation-service";
-
-export default class NavigationEventReducer {
-	constructor() {
-		this._caretUniformNavigationService = new CaretUniformNavigationService();
-	}
-
+﻿export default class NavigationEventReducer {
 	reduce(document, event) {
-		const reducedCarets = this._caretUniformNavigationService.moveAuthorsCarets(
-			document.carets,
-			event.author,
-			event.offset);
-
 		return {
 			...document,
-			carets: reducedCarets
+			carets: document.carets.map(caret => this._reduceCaret(caret, event))
+		};
+	}
+
+	_reduceCaret(caret, event) {
+		if (caret.owner !== event.author)
+			return caret;
+
+		return {
+			...caret,
+			position: caret.position + event.offset
 		};
 	}
 }

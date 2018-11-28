@@ -1,10 +1,4 @@
-﻿import CaretCascadeNavigationService from "../../document-navigation/caret-cascade-navigation-service";
-
-export default class InsertionEventCaretReducer {
-	constructor() {
-		this._caretCascadeNagigationService = new CaretCascadeNavigationService();
-	}
-
+﻿export default class InsertionEventCaretReducer {
 	reduce(document, event) {
 		return document.carets.map(caret => this._reduceCaret(caret, event));
 	}
