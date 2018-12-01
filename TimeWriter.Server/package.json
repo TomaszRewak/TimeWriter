@@ -1,0 +1,9 @@
+{
+  "name": "time-writer.server",
+  "version": "0.0.0",
+  "description": "TimeWriter.Server",
+  "main": "server.js",
+  "author": {
+    "name": ""
+  }
+}

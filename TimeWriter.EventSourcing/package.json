@@ -1,0 +1,9 @@
+{
+  "name": "time-writer.event-sourcing",
+  "version": "0.0.0",
+  "description": "TimeWriter.EventSourcing",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  }
+}
