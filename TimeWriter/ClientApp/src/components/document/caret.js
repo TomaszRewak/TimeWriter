@@ -9,9 +9,9 @@ const caretColors = [
 
 export default function Caret(props) {
 	const style = {
-		left: `${props.caret.position}00%`,
-		top: `${props.caret.position}00%`,
-		backgroundColor: caretColors[props.caret.owner % caretColors.length]
+		left: `${props.column}00%`,
+		top: `${props.line}00%`,
+		backgroundColor: caretColors[props.owner % caretColors.length]
 	};
 
 	return <div style={style} className="caret"/>;

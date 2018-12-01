@@ -21,10 +21,11 @@
 		.document .document-content .lines {
 		}
 
-		.document .document-content .lines .line {
-			display: flex;
-			flex-direction: row;
-		}
+			.document .document-content .lines .line {
+				display: flex;
+				flex-direction: row;
+				white-space: pre;
+			}
 
 		.document .document-content .carets {
 			position: absolute;

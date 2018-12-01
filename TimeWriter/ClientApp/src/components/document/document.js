@@ -3,8 +3,9 @@
 import React, { Component } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
 import TextDocument from '../../services/text-document';
-import Line from './line';
-import Caret from './caret';
+import Carets from './carets';
+import Lines from './lines';
+import LineNumbers from './line-numbers';
 
 class Document extends Component {
 	constructor(props) {
@@ -54,23 +55,10 @@ class Document extends Component {
 			<div>
 				<h1>{this.props.id}</h1>
 				<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>
-					<div className="line-numbers">
-						{[...Array(lines.length).keys()]
-							.map(i => i + 1)
-							.map(number => <div key={number} className="line-number">{number}</div>)
-						}
-					</div>
+					<LineNumbers text={this.state.document.text} />
 					<div className="document-content">
-						<div className="carets">
-							_
-							{this.state
-								.document
-								.carets
-								.map(caret => <Caret key={caret.id} caret={caret} />)}
-						</div>
-						<div className="lines">
-							{lines.map(line => <Line key={line.id} text={line} />)}
-						</div>
+						<Carets document={this.state.document} />	
+						<Lines text={this.state.document.text} />					
 					</div>
 				</div>
 			</div>

@@ -1,5 +1,5 @@
-﻿import { EventStore } from "./event-store";
-import EventReducer from "./event-reducer";
+﻿import EventStore from "./event-processing/event-store";
+import EventReducer from "./event-processing/event-reducer";
 import { shakspeareSampleText } from "../samples/sample-text";
 
 export default class TextDocument {

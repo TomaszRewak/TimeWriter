@@ -2,7 +2,7 @@
 import Caret from './caret';
 
 export default class Line extends Component {
-	shouldComponentUpdate(nextProps, nextState) {
+	shouldComponentUpdate(nextProps) {
 		return this.props.text !== nextProps.text;
 	}
 
