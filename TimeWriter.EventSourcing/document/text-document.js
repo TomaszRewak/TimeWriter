@@ -9,7 +9,7 @@ export default class TextDocument {
 				{ id: 0, owner: 1, position: 0, length: 0 },
 				{ id: 2, owner: 2, position: 0, length: 0 }
 			],
-			text: ''
+			text: shakspeareSampleText
 		};
 
 		this._eventStore = new EventStore();

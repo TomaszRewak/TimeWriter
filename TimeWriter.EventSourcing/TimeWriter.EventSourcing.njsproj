@@ -39,6 +39,8 @@
     <Folder Include="document\event-processing\event-reducers\deletion\" />
     <Folder Include="document\event-processing\event-reducers\insertion\" />
     <Folder Include="document\event-processing\event-reducers\navigation\" />
+    <Folder Include="document\event-processing\event-reducers\navigation\navigation-event-reducers\" />
+    <Folder Include="services\" />
     <Folder Include="samples\" />
   </ItemGroup>
   <ItemGroup>
@@ -58,11 +60,18 @@
     <Compile Include="document\event-processing\event-reducers\insertion\insertion-event-reducer.js" />
     <Compile Include="document\event-processing\event-reducers\insertion\insertion-event-text-reducer.js" />
     <Compile Include="document\event-processing\event-reducers\navigation\navigation-event-reducer.js" />
+    <Compile Include="document\event-processing\event-reducers\navigation\navigation-event-reducers\horizontal-navigation-event-reducer.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="document\event-processing\event-reducers\navigation\navigation-event-reducers\vertical-navigation-event-reducer.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="document\event-processing\event-store.js">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="document\text-document.js" />
     <Compile Include="samples\sample-text.js" />
+    <Compile Include="services\text-navigation-service.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

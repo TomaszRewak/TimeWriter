@@ -36,3 +36,9 @@
 				width: 2px;
 				height: 100%;
 			}
+
+		.document .document-content .lines .line,
+		.document .document-content .carets,
+		.document .line-numbers .line-number {
+			height: 1.2em;
+		}

@@ -30,6 +30,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="external\event-sourcing.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="public\bundle.js" />
     <Compile Include="server.js" />
     <Compile Include="src\components\document\caret.js" />
@@ -43,7 +46,6 @@
     <Compile Include="src\components\workspace\workspace.js" />
     <Compile Include="src\index.js" />
     <Compile Include="src\native\scrolling.js" />
-    <Compile Include="src\services\text-navigation-service.js" />
     <Compile Include="webpack.config.js">
       <SubType>Code</SubType>
     </Compile>
@@ -56,6 +58,7 @@
     <Content Include="src\components\document\_.css" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="external\" />
     <Folder Include="public\" />
     <Folder Include="src\" />
     <Folder Include="src\components\" />
@@ -64,7 +67,6 @@
     <Folder Include="src\components\routing\" />
     <Folder Include="src\components\workspace\" />
     <Folder Include="src\native\" />
-    <Folder Include="src\services\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />

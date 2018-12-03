@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react';
 import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
-import TextDocument from '../../../../TimeWriter.EventSourcing/document/text-document';
 import Carets from './carets';
 import Lines from './lines';
 import LineNumbers from './line-numbers';
+import { TextDocument } from '../../../external/event-sourcing';
 
 class Document extends Component {
 	constructor(props) {
@@ -34,14 +34,20 @@ class Document extends Component {
 		const key = e.key;
 		const keyCode = e.keyCode;
 
+		if (keyCode === 37 || keyCode === 39)
+			this._textDocument.addEvent({ author: 1, type: 'navigate', mode: 'move-horizontally', offset: keyCode === 37 ? -1 : +1 });
+		else if (keyCode === 38 || keyCode === 40)
+			this._textDocument.addEvent({ author: 1, type: 'navigate', mode: 'move-vertically', offset: keyCode === 38 ? -1 : +1 });
+		else if (keyCode === 8)
+			this._textDocument.addEvent({ author: 1, type: 'delete', mode: 'backward', length: 1 });
+		else if (keyCode === 46)
+			this._textDocument.addEvent({ author: 1, type: 'delete', mode: 'forward', length: 1 });
+		if (keyCode === 13)
+			this._textDocument.addEvent({ author: 1, type: 'insert', text: '\n' });
 		if (keyCode === 32)
 			this._textDocument.addEvent({ author: 1, type: 'insert', text: ' ' });
-		else if (48 <= keyCode && keyCode <= 90)
+		else if (keyCode >= 48)
 			this._textDocument.addEvent({ author: 1, type: 'insert', text: key });
-		else if (keyCode === 37 || keyCode === 39)
-			this._textDocument.addEvent({ author: 1, type: 'navigate', offset: keyCode === 37 ? -1 : +1 });
-		else if (keyCode === 8)
-			this._textDocument.addEvent({ author: 1, type: 'delete', length: 1 });
 
 		this.setState({
 			document: this._textDocument.state
@@ -57,8 +63,8 @@ class Document extends Component {
 				<div className="document" tabIndex="0" onKeyDown={this.keyPressed}>
 					<LineNumbers text={this.state.document.text} />
 					<div className="document-content">
-						<Carets document={this.state.document} />	
-						<Lines text={this.state.document.text} />					
+						<Carets document={this.state.document} />
+						<Lines text={this.state.document.text} />
 					</div>
 				</div>
 			</div>
