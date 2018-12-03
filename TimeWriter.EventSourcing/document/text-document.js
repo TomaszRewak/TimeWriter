@@ -6,12 +6,10 @@ export default class TextDocument {
 	constructor() {
 		this._documentState = {
 			carets: [
-				{ id: 0, owner: 1, position: 20, length: 0 },
-				{ id: 1, owner: 1, position: 40, length: 0 },
-				{ id: 2, owner: 2, position: 30, length: 0 },
-				{ id: 3, owner: 2, position: 120, length: 0 }
+				{ id: 0, owner: 1, position: 0, length: 0 },
+				{ id: 2, owner: 2, position: 0, length: 0 }
 			],
-			text: shakspeareSampleText.repeat(10)
+			text: ''
 		};
 
 		this._eventStore = new EventStore();
