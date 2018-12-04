@@ -3,7 +3,14 @@
   "version": "0.0.0",
   "description": "TimeWriter.Server",
   "main": "server.js",
+  "scripts": {
+    "run-and-watch": "nodemon server.js"
+  },
   "author": {
     "name": ""
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
   }
 }
