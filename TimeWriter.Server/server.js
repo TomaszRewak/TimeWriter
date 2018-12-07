@@ -6,16 +6,17 @@ const path = require('path');
 const port = process.env.PORT || 1337;
 const app = express();
 const server = http.Server(app);
-const io = socketIO(server);
+const io = new socketIO(server);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+io.origins(['http://localhost:8080']);
 io.on('connection', socket => {
 	console.log('connected to web socket');
-	socket.on('modify document', event => {
-		console.log('modify document');
-		socket.broadcast.emit('modify document', event);
+	socket.on('document change', event => {
+		console.log(event);
+		socket.broadcast.emit('document change', event);
 	});
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+server.listen(port, () => console.log(`Example app listening on port ${port}!`));

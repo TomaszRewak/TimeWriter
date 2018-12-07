@@ -1,11 +1,11 @@
 ﻿import './_.css';
 
 import React, { Component } from 'react';
-import { HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
 import Carets from './carets';
 import Lines from './lines';
 import LineNumbers from './line-numbers';
 import { TextDocument } from '../../../external/event-sourcing';
+import SocketIO from 'socket.io-client';
 
 class Document extends Component {
 	constructor(props) {
@@ -25,29 +25,51 @@ class Document extends Component {
 	}
 
 	componentDidMount() {
+		this._socket = SocketIO('http://localhost:1337');
+		this._socket.on('document change', event => {
+			console.log(event);
+			this.applyEvent(event);
+		});
+
 		//this._hubConnection.start().catch(err => console.error(err.toString()));
 		//this._hubConnection.on('addMessage', this.addMessage);
 		//this._hubConnection.invoke('sendMessage', 'dupa');
 	}
 
-	keyPressed(e) {
+	prepareEvent(e) {
 		const key = e.key;
 		const keyCode = e.keyCode;
 
 		if (keyCode === 37 || keyCode === 39)
-			this._textDocument.addEvent({ author: 1, type: 'navigate', mode: 'move-horizontally', offset: keyCode === 37 ? -1 : +1 });
+			return { author: 1, type: 'navigate', mode: 'move-horizontally', offset: keyCode === 37 ? -1 : +1 };
 		else if (keyCode === 38 || keyCode === 40)
-			this._textDocument.addEvent({ author: 1, type: 'navigate', mode: 'move-vertically', offset: keyCode === 38 ? -1 : +1 });
+			return { author: 1, type: 'navigate', mode: 'move-vertically', offset: keyCode === 38 ? -1 : +1 };
 		else if (keyCode === 8)
-			this._textDocument.addEvent({ author: 1, type: 'delete', mode: 'backward', length: 1 });
+			return { author: 1, type: 'delete', mode: 'backward', length: 1 };
 		else if (keyCode === 46)
-			this._textDocument.addEvent({ author: 1, type: 'delete', mode: 'forward', length: 1 });
+			return { author: 1, type: 'delete', mode: 'forward', length: 1 };
 		if (keyCode === 13)
-			this._textDocument.addEvent({ author: 1, type: 'insert', text: '\n' });
+			return { author: 1, type: 'insert', text: '\n' };
 		if (keyCode === 32)
-			this._textDocument.addEvent({ author: 1, type: 'insert', text: ' ' });
+			return { author: 1, type: 'insert', text: ' ' };
 		else if (keyCode >= 48)
-			this._textDocument.addEvent({ author: 1, type: 'insert', text: key });
+			return { author: 1, type: 'insert', text: key };
+
+		return null;
+	}
+
+	keyPressed(e) {
+		const event = this.prepareEvent(e);
+
+		if (!event)
+			return;
+
+		this.applyEvent(event);
+		this._socket.emit('document change', event);
+	}
+
+	applyEvent(event) {
+		this._textDocument.addEvent(event);
 
 		this.setState({
 			document: this._textDocument.state
