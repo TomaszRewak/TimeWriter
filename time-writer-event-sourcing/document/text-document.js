@@ -3,14 +3,17 @@ import EventReducer from "./event-processing/event-reducer";
 import { shakspeareSampleText } from "../samples/sample-text";
 
 export default class TextDocument {
-	constructor() {
-		this._documentState = {
-			carets: [
-				{ id: 0, owner: 1, position: 0, length: 0 },
-				{ id: 2, owner: 2, position: 0, length: 0 }
-			],
-			text: shakspeareSampleText
-		};
+	constructor(state) {
+		if (!state)
+			state = {
+				carets: [
+					{ id: 0, owner: 1, position: 0, length: 0 },
+					{ id: 2, owner: 2, position: 0, length: 0 }
+				],
+				text: shakspeareSampleText
+			};
+
+		this._documentState = state;
 
 		this._eventStore = new EventStore();
 		this._eventReducer = new EventReducer();

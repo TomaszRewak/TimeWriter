@@ -8,8 +8,12 @@ class DocumentRepository
 		};
 	}
 
-	getText(documentId) {
-		return this._documents[documentId].state.text;
+	getState(documentId) {
+		return this._documents[documentId].state;
+	}
+
+	addEvent(documentId, event) {
+		this._documents[documentId].addEvent(event);
 	}
 }
 

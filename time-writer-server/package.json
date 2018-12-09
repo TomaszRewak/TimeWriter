@@ -4,7 +4,7 @@
   "description": "TimeWriter.Server",
   "main": "server.js",
   "scripts": {
-    "run-and-watch": "nodemon --exec \"babel-node --ignore /node_modules/ --presets @babel/preset-env\" server.js"
+    "run-and-watch": "nodemon --exec \"babel-node --ignore dont_ignore_anything --presets @babel/preset-env\" server.js"
   },
   "author": {
     "name": ""
@@ -12,7 +12,9 @@
   "dependencies": {
     "@babel/core": "^7.2.0",
     "@babel/node": "^7.2.0",
+    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.2.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "socket.io": "^2.2.0"
   }

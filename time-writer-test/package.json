@@ -13,7 +13,7 @@
     "nodemon": "^1.18.7"
   },
   "scripts": {
-    "test": "babel-node --presets @babel/env --ignore anyValue test.js"
+    "test": "babel-node --presets @babel/env @babel/polyfill --ignore anyValue test.js"
   },
   "dependencies": {
     "@babel/core": "^7.2.0",

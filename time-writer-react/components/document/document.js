@@ -6,21 +6,27 @@ import Lines from './lines';
 import LineNumbers from './line-numbers';
 import { TextDocument } from '../../external/event-sourcing';
 import SocketIO from 'socket.io-client';
+import { get } from 'http';
 
 class Document extends Component {
 	constructor(props) {
 		super(props);
 
-		this._textDocument = new TextDocument();
-
 		this.keyPressed = this.keyPressed.bind(this);
 
 		this.state = {
-			document: this._textDocument.state
+			document: null
 		};
 	}
 
-	componentDidMount() {
+	async componentDidMount() {
+		const response = await fetch('http://localhost:1337/document/1');
+		const currentState = await response.json();
+
+		this._textDocument = new TextDocument(currentState);
+
+		this.setState({ document: this._textDocument.state })
+
 		this._socket = SocketIO('http://localhost:1337');
 		this._socket.on('document change', event => {
 			console.log(event);
@@ -51,6 +57,9 @@ class Document extends Component {
 	}
 
 	keyPressed(e) {
+		if (!this._socket)
+			return;
+
 		const event = this.prepareEvent(e);
 
 		if (!event)
@@ -69,7 +78,8 @@ class Document extends Component {
 	}
 
 	render() {
-		var lines = this.state.document.text.split('\n');
+		if (!this.state.document)
+			return <div>Loading...</div>;
 
 		return (
 			<div>
