@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Carets from './carets';
 import Lines from './lines';
 import LineNumbers from './line-numbers';
-import { TextDocument } from '../../../external/event-sourcing';
+import { TextDocument } from '../../external/event-sourcing';
 import SocketIO from 'socket.io-client';
 
 class Document extends Component {

@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import Caret from './caret';
-import { TextNavigationService } from '../../../external/event-sourcing';
+import { TextNavigationService } from '../../external/event-sourcing';
 
 export default class Carets extends Component {
 	constructor() {

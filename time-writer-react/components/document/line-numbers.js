@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import { TextNavigationService } from '../../../external/event-sourcing';
+import { TextNavigationService } from '../../external/event-sourcing';
 
 export default class LineNumbers extends Component {
 	constructor() {
