@@ -11,10 +11,6 @@ class Document extends Component {
 	constructor(props) {
 		super(props);
 
-		//this._hubConnection = new HubConnectionBuilder()
-		//	.withUrl("/document_hub")
-		//	.configureLogging(LogLevel.Information)
-		//	.build();
 		this._textDocument = new TextDocument();
 
 		this.keyPressed = this.keyPressed.bind(this);
@@ -30,10 +26,6 @@ class Document extends Component {
 			console.log(event);
 			this.applyEvent(event);
 		});
-
-		//this._hubConnection.start().catch(err => console.error(err.toString()));
-		//this._hubConnection.on('addMessage', this.addMessage);
-		//this._hubConnection.invoke('sendMessage', 'dupa');
 	}
 
 	prepareEvent(e) {
