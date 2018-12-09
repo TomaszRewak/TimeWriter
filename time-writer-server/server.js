@@ -1,7 +1,9 @@
-const http = require('http');
-const express = require('express');
-const socketIO = require('socket.io');
-const path = require('path');
+import http from 'http';
+import express from 'express';
+import socketIO from 'socket.io';
+import path from 'path';
+
+import documentRepository from './documents/document-repository'
 
 const port = process.env.PORT || 1337;
 const app = express();
@@ -17,6 +19,12 @@ io.on('connection', socket => {
 		console.log(event);
 		socket.broadcast.emit('document change', event);
 	});
+});
+
+app.get(['/document/:documentId'], (req, res) => {
+	const text = documentRepository.getText(req.params.documentId);
+
+	res.send(text);
 });
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`));
