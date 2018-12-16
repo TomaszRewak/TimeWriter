@@ -3,17 +3,20 @@ import TextDocument from '../../time-writer-event-sourcing/document/text-documen
 class DocumentRepository
 {
 	constructor () {
-		this._documents = {
-			1: new TextDocument()
-		};
+		this._documents = new Map();
 	}
 
-	getState(documentId) {
-		return this._documents[documentId].state;
+	getDocument(documentId)
+	{
+		this._createIfDoesntExist(documentId);
+
+		return this._documents.get(documentId);
 	}
 
-	addEvent(documentId, event) {
-		this._documents[documentId].addEvent(event);
+	_createIfDoesntExist(documentId)
+	{
+		if (!this._documents.has(documentId))
+			this._documents.set(documentId, new TextDocument());
 	}
 }
 

@@ -9,19 +9,22 @@ export default class Carets extends Component {
 		this.textNavigationService = new TextNavigationService();
 	}
 
-	render() {
-		const carets = this.props
+	prepareCarets() {
+		return this.props
 			.document
 			.carets
 			.map(caret => ({
 				...caret,
-				...this.textNavigationService.getCaretCoordinates(this.props.document.text, caret.position)
+				...this.textNavigationService.getCaretCoordinates(this.props.document.text, caret.position, this.props.configuration)
 			}))
-			.map(caret => <Caret key={caret.id} id={caret.id} owner={caret.owner} line={caret.line} column={caret.column} />);
+			.map((caret, i) => <Caret key={i} owner={caret.owner} line={caret.line} column={caret.column} />);
+	}
+
+	render() {
+		const carets = this.prepareCarets();
 
 		return (
 			<div className="carets">
-				_
 				{carets}
 			</div>
 		);

@@ -6,11 +6,8 @@ export default class TextDocument {
 	constructor(state) {
 		if (!state)
 			state = {
-				carets: [
-					{ id: 0, owner: 1, position: 0, length: 0 },
-					{ id: 2, owner: 2, position: 0, length: 0 }
-				],
-				text: shakspeareSampleText
+				carets: [],
+				text: ''
 			};
 
 		this._documentState = state;

@@ -9,18 +9,18 @@
 		return counter;
 	}
 
-	getCaretCoordinates(text, position) {
+	getCaretCoordinates(text, position, configuration) {
 		position = this._clipPosition(position, text);
 
 		let coordinates = { line: 0, column: 0 }
 
 		for (let i = 0; i < position; i++)
-			this._moveCoordinates(coordinates, text[i]);
+			coordinates = this._reduceCoordinates(coordinates, text[i], configuration);
 
 		return coordinates;
 	}
 
-	getCaretPosition(text, coordinates) {
+	getCaretPosition(text, coordinates, configuration) {
 		coordinates = this._clipCoordinates(coordinates, text);
 
 		let position = 0;
@@ -33,7 +33,7 @@
 			text[position] !== '\n';
 			position++
 		)
-			this._moveCoordinates(pointerCoordinates, text[position]);
+			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position], configuration);
 
 		return position;
 	}
@@ -51,14 +51,11 @@
 		};
 	}
 
-	_moveCoordinates(coordinates, character) {
-		if (character === '\n') {
-			coordinates.column = 0;
-			coordinates.line = coordinates.line + 1;
-		}
-		else {
-			coordinates.column = coordinates.column + 1; 
-			coordinates.line = coordinates.line;
+	_reduceCoordinates(coordinates, character, configuration) {
+		switch (character) {
+			case '\n': return { column: 0, line: coordinates.line + 1 };
+			case '\t': return { column: coordinates.column + configuration.tabSize, line: coordinates.line }
+			default: return { column: coordinates.column + 1, line: coordinates.line };
 		}
 	}
 }

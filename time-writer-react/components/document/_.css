@@ -7,38 +7,55 @@
 	flex-direction: row;
 }
 
-	.document .line-numbers {
-		background-color: #222222;
-		text-align: right;
-		padding: 5px;
+.document .line-numbers {
+	background-color: #222222;
+	text-align: right;
+	padding: 5px;
+}
+
+.document .document-content {
+	position: relative;
+	padding: 5px;
+}
+
+.document .document-content .lines {}
+
+.document .document-content .lines .line {
+	display: flex;
+	flex-direction: row;
+	white-space: pre;
+	tab-size: 4;
+}
+
+.document .document-content .carets {
+	position: absolute;
+	width: 1ch;
+}
+
+.document .document-content .carets .caret {
+	position: absolute;
+    width: 2px;
+    height: 1em;
+    bottom: 0;
+    margin: 0 -1px;
+    /* animation: caret-animation 1s linear infinite; */
+}
+
+@keyframes caret-animation {
+	20% {
+		opacity: 1;
 	}
-
-	.document .document-content {
-		position: relative;
-		padding: 5px;
+	30% {
+		opacity: 0;
 	}
+	70% {
+		opacity: 0;
+	}
+	80% {
+		opacity: 1;
+	}
+}
 
-		.document .document-content .lines {
-		}
-
-			.document .document-content .lines .line {
-				display: flex;
-				flex-direction: row;
-				white-space: pre;
-			}
-
-		.document .document-content .carets {
-			position: absolute;
-		}
-
-			.document .document-content .carets .caret {
-				position: absolute;
-				width: 2px;
-				height: 100%;
-			}
-
-		.document .document-content .lines .line,
-		.document .document-content .carets,
-		.document .line-numbers .line-number {
-			height: 1.2em;
-		}
+.document .document-content .lines .line, .document .document-content .carets, .document .line-numbers .line-number {
+	height: 1.2em;
+}

@@ -1,0 +1,49 @@
+.line .text-fragment-comment {
+	color: rgb(153, 185, 105);
+}
+
+.line .text-fragment-string {
+	color: rgb(194, 94, 48);
+}
+
+.line .text-fragment-statement {
+	color: rgb(96, 151, 223);
+}
+
+.line .text-fragment-bracket {
+	color: rgb(118, 209, 106);
+}
+
+.line .text-fragment-space {
+	position: relative;
+}
+
+.line .text-fragment-space::after {
+	content: " ";
+    display: block;
+    background-color: rgba(255, 255, 255, 0.1);
+    width: 4px;
+    height: 4px;
+    border-radius: 5px;
+    left: -2px;
+    top: -2px;
+    position: absolute;
+    margin: 0.5em 0.5ch;
+}
+
+.line .text-fragment-tab {
+	position: relative;
+}
+
+.line .text-fragment-tab::after {
+    content: " ";
+    display: block;
+    background-color: rgba(255, 255, 255, 0.1);
+    height: 4px;
+    border-radius: 5px;
+    left: 0;
+    right: 0;
+    top: -2px;
+    position: absolute;
+    margin: 0.5em 2px;
+}

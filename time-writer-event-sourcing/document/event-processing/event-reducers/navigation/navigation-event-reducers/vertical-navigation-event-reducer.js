@@ -22,15 +22,21 @@ export default class VerticalNavigationEventReducer {
 	}
 
 	_reduceOwnedCaret(text, caret, event) {
-		const caretCoordinates = this.textNavigationService.getCaretCoordinates(text, caret.position);
-		const caretPosition = this.textNavigationService.getCaretPosition(text, {
-			column: caretCoordinates.column,
-			line: caretCoordinates.line + event.offset
-		});
+		const caretCoordinates = this.textNavigationService.getCaretCoordinates(text, caret.position, event.configuration);
+		const newCaretCoordinates = this._reduceCaretCoordinatesBy(caretCoordinates,event.offset );
+		const newCaretPosition = this.textNavigationService.getCaretPosition(text, newCaretCoordinates, event.configuration);
 
 		return {
 			...caret,
-			position: caretPosition
+			position: newCaretPosition
+		};
+	}
+
+	_reduceCaretCoordinatesBy(coordinates, offset)
+	{
+		return {
+			column: coordinates.column,
+			line: coordinates.line + offset
 		};
 	}
 }
