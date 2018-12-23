@@ -15,7 +15,7 @@ export default class Carets extends Component {
 			.carets
 			.map(caret => ({
 				...caret,
-				...this.textNavigationService.getCaretCoordinates(this.props.document.text, caret.position, this.props.configuration)
+				...this.textNavigationService.getCaretCoordinates(this.props.document.text, caret.position)
 			}))
 			.map((caret, i) => <Caret key={i} owner={caret.owner} line={caret.line} column={caret.column} />);
 	}

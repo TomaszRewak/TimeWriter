@@ -8,6 +8,7 @@ import LineNumbers from './line-numbers';
 import { TextDocument } from '../../external/event-sourcing';
 import SocketIO from 'socket.io-client';
 import { get } from 'http';
+import EventFactory from '../../services/event-factory';
 
 class Document extends Component {
 	constructor(props) {
@@ -16,10 +17,7 @@ class Document extends Component {
 		this.keyDown = this.keyDown.bind(this);
 
 		this.state = {
-			document: null,
-			configuration: {
-				tabSize: 4
-			}
+			document: null
 		};
 	}
 
@@ -30,6 +28,7 @@ class Document extends Component {
 		const currentState = await response.json();
 
 		this._textDocument = new TextDocument(currentState);
+		this._eventFactory = new EventFactory();
 
 		this.setState({ document: this._textDocument.state })
 
@@ -40,52 +39,11 @@ class Document extends Component {
 		});
 
 		console.dir(this._socket);
-		this.sendEvent(this.prepareEvent({ type: 'manage-carets', operation: 'add-caret', position: 0 }));
-	}
-
-	prepareEvent(baseEvent) {
-		return {
-			...baseEvent,
-			author: null,
-			configuration: this.state.configuration
-		}
-	}
-
-	prepareKeyPressEvent(e) {
-		const key = e.key;
-		const author = null;
-
-		return { author, type: 'insert', text: key };
-	}
-
-	prepareKeyDownEvent(e) {
-		const key = e.keyCode;
-		const char = e.key;
-
-		if (key === 37 || key === 39)
-			return { type: 'navigate', mode: 'move-horizontally', offset: key === 37 ? -1 : +1 };
-		else if (key === 38 || key === 40)
-			return { type: 'navigate', mode: 'move-vertically', offset: key === 38 ? -1 : +1 };
-		else if (key === 8)
-			return { type: 'delete', mode: 'backward', length: 1 };
-		else if (key === 46)
-			return { type: 'delete', mode: 'forward', length: 1 };
-		if (key === 13)
-			return { type: 'insert', text: '\n' };
-		if (key === 9)
-			return {  type: 'insert', text: '\t' };
-		if (key === 32)
-			return { type: 'insert', text: ' ' };
-		else if (key >= 48 && key <= 90 || key >= 96 && key <= 111 || key >= 186 && key <= 222)
-			return { type: 'insert', text: char };
-		return null;
+		this.sendEvent({ type: 'manage-carets', operation: 'add-caret', position: 0 });
 	}
 
 	keyDown(e) {
-		const event = this.prepareEvent(this.prepareKeyDownEvent(e));
-
-		if (!event)
-			return;
+		const event = this._eventFactory.prepareKeyDownEvent(this._textDocument.state, e);
 
 		this.sendEvent(event);
 	}
@@ -117,7 +75,7 @@ class Document extends Component {
 				<div className="document" tabIndex="0" onKeyDown={this.keyDown}>
 					<LineNumbers text={this.state.document.text} />
 					<div className="document-content">
-						<Carets document={this.state.document} configuration={this.state.configuration} />
+						<Carets document={this.state.document} />
 						<Lines text={this.state.document.text} />
 					</div>
 				</div>
