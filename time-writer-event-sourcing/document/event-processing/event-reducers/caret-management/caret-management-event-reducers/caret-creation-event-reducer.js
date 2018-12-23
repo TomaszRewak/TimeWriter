@@ -11,7 +11,8 @@ export default class CaretCreationEventReducer {
 			...carets,
 			{
 				owner: event.author,
-				position: 0
+				position: 0,
+				lastOperation: 'creation'
 			}
 		];
 	}

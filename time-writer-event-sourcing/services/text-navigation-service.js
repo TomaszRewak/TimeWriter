@@ -20,22 +20,17 @@
 		return coordinates;
 	}
 
-	getCaretPosition(text, coordinates) {
-		// Can be rewritten
-
-		coordinates = this._clipCoordinates(coordinates, text);
-
+	getCaretPosition(text, coordinates) {			
 		let position = 0;
 
-		for (
-			let pointerCoordinates = { line: 0, column: 0 };
-			pointerCoordinates.line < coordinates.line ||
-			pointerCoordinates.line === coordinates.line &&
-			pointerCoordinates.column < coordinates.column &&
-			text[position] !== '\n';
-			position++
-		)
-			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position]);
+		let pointerCoordinates = { line: 0, column: 0 };
+		const targetCoordinates = this._clipCoordinates(coordinates, text);
+
+		while (pointerCoordinates.line < targetCoordinates.line)
+			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
+
+		while (pointerCoordinates.column < targetCoordinates.column && text[position] !== '\n')
+			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
 
 		return position;
 	}

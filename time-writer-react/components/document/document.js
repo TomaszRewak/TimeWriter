@@ -45,6 +45,9 @@ class Document extends Component {
 	keyDown(e) {
 		const event = this._eventFactory.prepareKeyDownEvent(this._textDocument.state, e);
 
+		if (!event)
+			return;
+
 		this.sendEvent(event);
 	}
 

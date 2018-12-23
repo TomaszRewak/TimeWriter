@@ -9,14 +9,19 @@ export default class DeletionEventReducer {
 
 	reduce(document, event) {
 		for (let caret in document.carets)
-			document = this._reduceUsingCaret(document, { ...event, caret: document.carets[caret] });
+			document = this._reduceUsingCaret(document, event, document.carets[caret]);
 
 		return document;
 	}
 
-	_reduceUsingCaret(document, event) {
-		if (event.author !== event.caret.owner)
+	_reduceUsingCaret(document, event, caret) {
+		if (event.author !== caret.owner)
 			return document;
+
+		event = {
+			...event,
+			caret
+		}
 
 		return {
 			...document,

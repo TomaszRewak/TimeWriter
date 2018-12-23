@@ -18,8 +18,6 @@
 	padding: 5px;
 }
 
-.document .document-content .lines {}
-
 .document .document-content .lines .line {
 	display: flex;
 	flex-direction: row;
@@ -38,22 +36,6 @@
     height: 1em;
     bottom: 0;
     margin: 0 -1px;
-    /* animation: caret-animation 1s linear infinite; */
-}
-
-@keyframes caret-animation {
-	20% {
-		opacity: 1;
-	}
-	30% {
-		opacity: 0;
-	}
-	70% {
-		opacity: 0;
-	}
-	80% {
-		opacity: 1;
-	}
 }
 
 .document .document-content .lines .line, .document .document-content .carets, .document .line-numbers .line-number {

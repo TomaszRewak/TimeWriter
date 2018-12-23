@@ -9,7 +9,8 @@
 
 		return {
 			...caret,
-			position: caret.position + event.text.length
+			position: caret.position + event.text.length,
+			lastOperation: 'insertion'
 		};
 	}
 }

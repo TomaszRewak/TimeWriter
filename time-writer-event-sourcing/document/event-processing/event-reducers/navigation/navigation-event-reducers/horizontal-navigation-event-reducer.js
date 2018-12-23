@@ -14,7 +14,8 @@
 
 		return {
 			...caret,
-			position: Math.max(0, Math.min(maxPosition, caret.position + event.offset))
+			position: Math.max(0, Math.min(maxPosition, caret.position + event.offset)),
+			lastOperation: 'navigation horizontal'
 		};
 	}
 }

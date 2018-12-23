@@ -2,29 +2,31 @@
 	reduce(document, event) {
 		switch (event.mode) {
 			case 'backward':
-				return document.carets.map(caret => this._reduceCaretBackward(caret, event));
+				return document.carets.map(caret => this._reduceCaretBackward(document, caret, event));
 			case 'forward':
-				return document.carets.map(caret => this._reduceCaretForward(caret, event));
+				return document.carets.map(caret => this._reduceCaretForward(document, caret, event));
 		}
 	}
 
-	_reduceCaretBackward(caret, event) {
+	_reduceCaretBackward(document, caret, event) {
 		if (caret.position < event.caret.position)
 			return caret;
 
 		return {
 			...caret,
-			position: caret.position - event.length
+			position: Math.max(0, caret.position - event.length),
+			lastOperation: 'deletion backward'
 		};
 	}
 
-	_reduceCaretForward(caret, event) {
+	_reduceCaretForward(document, caret, event) {
 		if (caret.position <= event.caret.position)
 			return caret;
 
 		return {
 			...caret,
-			position: caret.position -event.length
+			position: Math.min(document.text.length - event.length, caret.position - event.length),
+			lastOperation: 'deletion forward'
 		};
 	}
 }
