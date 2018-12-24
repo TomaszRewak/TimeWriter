@@ -18,13 +18,10 @@ export default class InsertionEventPreProcessor
 
 	_prepareEventText(document, event, caret)
 	{
-		console.dir(event);
-
 		if (event.text !== '\n')
 			return event.text;
 
 		let indent = this._textFormattingService.getIndentAtPosition(document.text, caret.position);
-		console.log(indent);
 
 		return `\n${'\t'.repeat(indent)}`
 	}

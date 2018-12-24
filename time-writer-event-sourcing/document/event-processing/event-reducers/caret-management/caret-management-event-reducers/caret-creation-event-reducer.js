@@ -1,17 +1,25 @@
+import TextNavigationService from "../../../../../services/text-navigation-service";
+
 export default class CaretCreationEventReducer {
+	constructor() {
+		this._textNavigationService = new TextNavigationService();
+	}
+
 	reduce(document, event) {
 		return {
 			...document,
-			carets: this._reduceCarets(document.carets, event)
+			carets: this._reduceCarets(document, event)
 		}
 	}
 
-	_reduceCarets(carets, event) {
+	_reduceCarets(document, event) {
+		const position = this._textNavigationService.getCaretPosition(document.text, event.coordinates);
+
 		return [
-			...carets,
+			...document.carets,
 			{
 				owner: event.author,
-				position: 0,
+				position,
 				lastOperation: 'creation'
 			}
 		];

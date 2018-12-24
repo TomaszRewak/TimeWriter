@@ -1,0 +1,65 @@
+.logs {
+	grid-area: logs;
+    background: #2b2828;
+    border-left: 1px solid #1f1f1f;
+	display: flex;
+	flex-direction: column;
+}
+
+.logs .log {
+	font-family: 'Inconsolata', monospace;
+	font-size: 14px;
+	border-left: 3px solid #00000012;
+	padding-left: 5px;
+}
+
+.logs .log.own
+{
+	border-left-color: rgb(77, 113, 179);
+	background: rgba(77, 113, 179, 0.2);
+}
+
+.logs .log .object {
+    width: 100%;
+}
+
+.logs .log .object > .bracket {
+    color: #d4ae9b;
+}
+
+.logs .log .object > .values {
+	margin-left: 3ch;
+}
+
+.logs .log .object > .values > .parameter {
+	display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.logs .log .object > .values > .parameter > .key {
+	color: rgb(125, 187, 119);
+}
+
+.logs .log .object > .values > .parameter > .colon {
+	color: rgba(255,255,255,0.2);
+}
+
+.logs .log .object > .values > .parameter > .value.string {
+	color: rgb(125, 187, 119);
+}
+
+.logs .log .object > .values > .parameter > .value.number {
+	color: rgb(175, 108, 108);
+}
+
+.logs a {
+	background: #404040;
+    color: gray;
+    padding: 10px 15px;
+    border-radius: 10px;
+    align-self: flex-end;
+	cursor: pointer;
+	user-select: none;
+	margin: 5px;
+}

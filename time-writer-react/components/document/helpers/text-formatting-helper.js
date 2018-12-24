@@ -54,8 +54,6 @@ export default class TextFormattingHelper {
 			if (!match)
 				continue;
 
-			console.dir(match)
-
 			const matchText = match[0];
 			const startIndex = match.index;
 			const endIndex = startIndex + matchText.length;

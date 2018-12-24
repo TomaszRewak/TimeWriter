@@ -2,28 +2,25 @@
   "name": "time-writer.client",
   "version": "0.0.0",
   "description": "TimeWriter.Client",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "build dev": "webpack --mode development",
     "build prod": "webpack --mode production",
     "watch": "webpack --w --mode development",
-    "run-and-watch": "nodemon server.js"
+    "run-and-watch": "nodemon app.js"
   },
   "author": {
     "name": ""
   },
   "dependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.2.0",
     "express": "^4.16.4",
     "path": "^0.12.7",
     "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "webpack": "^4.27.1"
+    "react-dom": "^16.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.1.6",
+    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.1.6",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
@@ -31,10 +28,5 @@
     "style-loader": "^0.23.1",
     "webpack": "^4.26.1",
     "webpack-cli": "^3.1.2"
-  },
-  "-vs-binding": {
-    "ProjectOpened": [
-      "watch"
-    ]
   }
 }

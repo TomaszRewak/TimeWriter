@@ -9,16 +9,21 @@ import { TextDocument } from '../../external/event-sourcing';
 import SocketIO from 'socket.io-client';
 import { get } from 'http';
 import EventFactory from '../../services/event-factory';
+import Logs from '../logs/logs';
 
 class Document extends Component {
 	constructor(props) {
 		super(props);
 
+		this._eventFactory = new EventFactory();
+
 		this.keyDown = this.keyDown.bind(this);
+		this.click = this.click.bind(this);
 
 		this.state = {
-			document: null
-		};
+			document: null,
+			logs: []
+		}
 	}
 
 	async componentDidMount() {
@@ -28,34 +33,36 @@ class Document extends Component {
 		const currentState = await response.json();
 
 		this._textDocument = new TextDocument(currentState);
-		this._eventFactory = new EventFactory();
 
 		this.setState({ document: this._textDocument.state })
 
 		this._socket = SocketIO(`http://localhost:1337?document=${documentId}`);
 		this._socket.on('document change', event => {
-			console.log(event);
+			this.logEvent(event);
 			this.applyEvent(event);
 		});
 
-		console.dir(this._socket);
-		this.sendEvent({ type: 'manage-carets', operation: 'add-caret', position: 0 });
+		this.sendEvent(this._eventFactory.prepareAddCaretEvent({ line: 0, column: 0 }));
 	}
 
 	keyDown(e) {
-		const event = this._eventFactory.prepareKeyDownEvent(this._textDocument.state, e);
+		const events = this._eventFactory.prepareKeyDownEvents(e);
 
-		if (!event)
-			return;
+		for (const event of events)
+			this.sendEvent(event);
+	}
 
-		this.sendEvent(event);
+	click(e) {
+		const events = this._eventFactory.prepareClickEvents(e);
+
+		for (const event of events)
+			this.sendEvent(event);
 	}
 
 	sendEvent(event) {
-		console.log(event);
+		this.logEvent(event);
 		this.applyEvent(event);
 		this._socket.emit('document change', event, timestamp => {
-			console.log(timestamp);
 			event.timestamp = timestamp;
 		});
 	}
@@ -68,20 +75,30 @@ class Document extends Component {
 		});
 	}
 
+	logEvent(event) {
+		this.setState({
+			logs: [
+				event,
+				...this.state.logs.slice(0, 5)
+			]
+		})
+	}
+
 	render() {
 		if (!this.state.document)
 			return <div>Loading...</div>;
 
 		return (
-			<div>
-				<h1>{this.props.id}</h1>
+			<div className="workspace">
+				<div className="header">{`Document ${this.props.id}`}</div>
 				<div className="document" tabIndex="0" onKeyDown={this.keyDown}>
 					<LineNumbers text={this.state.document.text} />
-					<div className="document-content">
+					<div className="document-content" onClick={this.click} >
 						<Carets document={this.state.document} />
 						<Lines text={this.state.document.text} />
 					</div>
 				</div>
+				<Logs logs={this.state.logs} />
 			</div>
 		);
 	}

@@ -4,7 +4,7 @@ import socketIO from 'socket.io';
 import path from 'path';
 import cors from 'cors';
 
-import documentRepository from './documents/document-repository'
+import documentRepository from './../documents/document-repository'
 
 const port = process.env.PORT || 1337;
 const app = express();
@@ -14,7 +14,7 @@ const io = new socketIO(server);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
-io.origins(['http://localhost:8080']);
+io.origins(['http://localhost:8080', 'text-sourcing.tomasz-rewak.com']);
 io.on('connection', socket => {
 	console.log('Got connected!');
 

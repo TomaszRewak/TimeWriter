@@ -1,49 +1,79 @@
-export default class EventFactory
-{
-	prepareKeyDownEvent(document, e) {
+export default class EventFactory {
+	prepareKeyDownEvents(e) {
 		const key = e.keyCode;
 		const char = e.key;
 
 		if (key === 37)
-			return this._prepareMoveLeftEvent();
+			return [this.prepareMoveLeftEvent()];
 		if (key === 39)
-			return this._prepareMoveRightEvent();			
+			return [this.prepareMoveRightEvent()];
 		if (key === 38)
-			return this._prepareMoveUpEvent();
+			return [this.prepareMoveUpEvent()];
 		if (key === 40)
-		return this._prepareMoveDownEvent();
+			return [this.prepareMoveDownEvent()];
 		if (key === 8)
-			return { type: 'delete', mode: 'backward', length: 1 };
+			return [this.prepareBackwardDeleteEvent()];
 		if (key === 46)
-			return { type: 'delete', mode: 'forward', length: 1 };
+			return [this.prepareForwardDeleteEvent()];
 		if (key === 13)
-			return { type: 'insert', text: '\n' };
+			return [this.prepareInsertEvent('\n')];
 		if (key === 9)
-			return {  type: 'insert', text: '\t' };
+			return [this.prepareInsertEvent('\t')];
 		if (key === 32)
-			return { type: 'insert', text: ' ' };
+			return [this.prepareInsertEvent(' ')];
 		if (key >= 48 && key <= 90 || key >= 96 && key <= 111 || key >= 186 && key <= 222)
-			return { type: 'insert', text: char };
-		return null;
+			return [this.prepareInsertEvent(char)];
+		return [];
 	}
 
-	_prepareMoveLeftEvent()
-	{
+	prepareClickEvents(e) {
+		const rect = e.target.getBoundingClientRect();
+
+		const coordinates = {
+			line: Math.floor((e.clientY - rect.top) / 16.797),
+			column: Math.floor((e.clientX - rect.left) / 7)
+		}
+
+		return [
+			this.prepareRemoveCaretsEvent(),
+			this.prepareAddCaretEvent(coordinates)
+		]
+	}
+
+	prepareMoveLeftEvent() {
 		return { type: 'navigate', mode: 'move-horizontally', offset: -1 };
 	}
 
-	_prepareMoveRightEvent()
-	{
+	prepareMoveRightEvent() {
 		return { type: 'navigate', mode: 'move-horizontally', offset: +1 };
 	}
 
-	_prepareMoveUpEvent()
-	{
+	prepareMoveUpEvent() {
 		return { type: 'navigate', mode: 'move-vertically', offset: -1 };
 	}
 
-	_prepareMoveDownEvent()
-	{
+	prepareMoveDownEvent() {
 		return { type: 'navigate', mode: 'move-vertically', offset: +1 };
 	}
+
+	prepareBackwardDeleteEvent() {
+		return { type: 'delete', mode: 'backward', length: 1 };
+	}
+
+	prepareForwardDeleteEvent() {
+		return { type: 'delete', mode: 'forward', length: 1 };
+	}
+
+	prepareInsertEvent(text) {
+		return { type: 'insert', text };
+	}
+
+	prepareAddCaretEvent(coordinates) {
+		return { type: 'manage-carets', operation: 'add-caret', coordinates };
+	}
+
+	prepareRemoveCaretsEvent() {
+		return { type: 'manage-carets', operation: 'remove-carets' };
+	}
+
 }

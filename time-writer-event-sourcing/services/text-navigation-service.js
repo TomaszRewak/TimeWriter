@@ -26,10 +26,10 @@
 		let pointerCoordinates = { line: 0, column: 0 };
 		const targetCoordinates = this._clipCoordinates(coordinates, text);
 
-		while (pointerCoordinates.line < targetCoordinates.line)
+		while (pointerCoordinates.line < targetCoordinates.line && position < text.length)
 			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
 
-		while (pointerCoordinates.column < targetCoordinates.column && text[position] !== '\n')
+		while (pointerCoordinates.column < targetCoordinates.column && position < text.length && text[position] !== '\n')
 			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
 
 		return position;

@@ -4,18 +4,27 @@
   "description": "TimeWriter.Server",
   "main": "server.js",
   "scripts": {
-    "run-and-watch": "nodemon --exec \"babel-node --ignore dont_ignore_anything --presets @babel/preset-env\" server.js"
+    "build dev": "webpack --mode development",
+    "build prod": "webpack --mode production",
+    "watch": "webpack --w --mode development",
+    "run-and-watch": "nodemon app.js"
   },
   "author": {
     "name": ""
   },
   "dependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/node": "^7.2.0",
-    "@babel/polyfill": "^7.0.0",
-    "@babel/preset-env": "^7.2.0",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/polyfill": "^7.2.5",
+    "@babel/preset-env": "^7.1.6",
+    "babel-loader": "^8.0.4",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.26.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-node-externals": "^1.7.2"
   }
 }
