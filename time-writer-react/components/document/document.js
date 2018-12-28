@@ -29,14 +29,17 @@ class Document extends Component {
 	async componentDidMount() {
 		const documentId = 2;
 
-		const response = await fetch(`http://localhost:1337/document/${documentId}`);
+		//const serverUrl = `http://localhost:1337`;
+		const serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
+
+		const response = await fetch(`${serverUrl}/document/${documentId}`);
 		const currentState = await response.json();
 
 		this._textDocument = new TextDocument(currentState);
 
 		this.setState({ document: this._textDocument.state })
 
-		this._socket = SocketIO(`http://localhost:1337?document=${documentId}`);
+		this._socket = SocketIO(`${serverUrl}?document=${documentId}`);
 		this._socket.on('document change', event => {
 			this.logEvent(event);
 			this.applyEvent(event);
