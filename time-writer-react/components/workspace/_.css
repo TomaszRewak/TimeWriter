@@ -1,0 +1,84 @@
+.workspace {
+	background-color: #28292b;
+	display: flex;
+	flex-direction: column;
+	width: 100vw;
+	height: 100vh;
+}
+
+.workspace.blurred {
+	filter: blur(2px);
+}
+
+.workspace-bar {
+	display: flex;
+	flex-direction: row;
+	border-bottom: 1px solid #1f1f1f;
+}
+
+.workspace-item {
+	display: flex;
+	color: white;
+	padding: 2px 5px;
+	font-size: 15px;
+	margin: 2px 2px 0 2px;
+	background: #323335;
+}
+
+.workspace-item:hover {
+	background-color: #232425;
+}
+
+.workspace-item.selected {
+	background: #1f1f1f;
+}
+
+.workspace-item>.select-button {
+	cursor: pointer;
+}
+
+.workspace-item>.close-button {
+	opacity: 0.5;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.workspace-item>.close-button:hover {
+	opacity: 1;
+	color: darkred;
+}
+
+.workspace-item.new {
+	cursor: pointer;
+	user-select: none;
+	min-height: 20px;
+}
+
+.workspace-item.new > .file-name-input {
+	width: 0;
+	transition-duration: 0.2s;
+	padding: 0;
+    border: none;
+    background: #d8d8d8;
+	outline: none;
+}
+
+.workspace-item.new:hover > .file-name-input {
+	width: 200px;
+	margin-right: 5px;
+	padding: 0 5px;
+}
+
+.workspace-item.new > input[type="submit"] {
+	border: none;
+    background: none;
+    padding: 0 0px;
+	margin: 0;
+	color: white;
+	cursor: pointer;
+	outline: none;
+}
+
+.workspace-item.new:hover > input[type="submit"] {
+	color: rgb(67, 99, 187);
+}

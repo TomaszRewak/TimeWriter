@@ -2,8 +2,8 @@
 
 const Home = props =>
 	<div>
-		<a href={'/document/1'}>
-			Document
+		<a href={'/workspace'}>
+			Workspace
 		</a>
 	</div>;
 

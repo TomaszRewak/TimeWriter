@@ -27,7 +27,7 @@ class Document extends Component {
 	}
 
 	async componentDidMount() {
-		const documentId = 2;
+		const documentId = this.props.id;
 
 		//const serverUrl = `http://localhost:1337`;
 		const serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
@@ -46,6 +46,10 @@ class Document extends Component {
 		});
 
 		this.sendEvent(this._eventFactory.prepareAddCaretEvent({ line: 0, column: 0 }));
+	}
+
+	componentWillUnmount() {
+		this._socket.disconnect() 
 	}
 
 	keyDown(e) {
@@ -89,11 +93,10 @@ class Document extends Component {
 
 	render() {
 		if (!this.state.document)
-			return <div>Loading...</div>;
+			return <div className="loading-screen">Loading...</div>;
 
 		return (
-			<div className="workspace">
-				<div className="header">{`Document ${this.props.id}`}</div>
+			<div className="document-scope">
 				<div className="document" tabIndex="0" onKeyDown={this.keyDown}>
 					<LineNumbers text={this.state.document.text} />
 					<div className="document-content" onClick={this.click} >

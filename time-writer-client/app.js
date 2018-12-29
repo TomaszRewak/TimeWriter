@@ -6,7 +6,7 @@ const port = process.env.PORT || 8080;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get(['/', '/document/1'], (req, res) => {
+app.get(['/', '/workspace'], (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'));
 });
 

@@ -31,7 +31,7 @@ export default class EventFactory {
 
 		const coordinates = {
 			line: Math.floor((e.clientY - rect.top) / 16.797),
-			column: Math.floor((e.clientX - rect.left) / 7)
+			column: Math.round((e.clientX - rect.left) / 7)
 		}
 
 		return [

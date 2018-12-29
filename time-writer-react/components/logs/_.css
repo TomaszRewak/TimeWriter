@@ -1,5 +1,4 @@
 .logs {
-	grid-area: logs;
     background: #2b2828;
     border-left: 1px solid #1f1f1f;
 	display: flex;

@@ -9,7 +9,7 @@ const Routing = () =>
 		<BrowserRouter>
 			<div>
 				<Route exact path='/' component={Home} />
-				<Route path='/document/:documentId?' component={Workspace} />
+				<Route path='/workspace' component={Workspace} />
 			</div>
 		</BrowserRouter>
 	</div>;
