@@ -13,7 +13,19 @@
 .workspace-bar {
 	display: flex;
 	flex-direction: row;
+	justify-content: space-between;
 	border-bottom: 1px solid #1f1f1f;
+}
+
+.workspace-bar-items {
+	display: flex;
+	flex-direction: row;
+}
+
+.workspace-bar-info {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 .workspace-item {
@@ -54,31 +66,56 @@
 	min-height: 20px;
 }
 
-.workspace-item.new > .file-name-input {
+.workspace-item.new>.file-name-input {
 	width: 0;
 	transition-duration: 0.2s;
 	padding: 0;
-    border: none;
-    background: #d8d8d8;
+	border: none;
+	background: #d8d8d8;
 	outline: none;
 }
 
-.workspace-item.new:hover > .file-name-input {
+.workspace-item.new:hover>.file-name-input {
 	width: 200px;
 	margin-right: 5px;
 	padding: 0 5px;
 }
 
-.workspace-item.new > input[type="submit"] {
+.workspace-item.new>input[type="submit"] {
 	border: none;
-    background: none;
-    padding: 0 0px;
+	background: none;
+	padding: 0 0px;
 	margin: 0;
 	color: white;
 	cursor: pointer;
 	outline: none;
 }
 
-.workspace-item.new:hover > input[type="submit"] {
+.workspace-item.new:hover>input[type="submit"] {
 	color: rgb(67, 99, 187);
+}
+
+.workspace-bar-info>.me {
+	font-size: 17px;
+	color: #4a4a4a;
+	position: relative;
+}
+
+.workspace-bar-info>.me>img {
+	height: 150px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 3;
+	opacity: 0;
+	transition-duration: 1s;
+	pointer-events: none;
+	box-shadow: 0 0 10px 0px #131313;
+}
+
+.workspace-bar-info>.me:hover>img {
+	height: 150px;
+	position: absolute;
+	z-index: 3;
+	opacity: 1;
 }

@@ -27,6 +27,8 @@ export default class Logs extends Component {
 		return (
 			<div className="logs">
 				<a onClick={this.hideLogs}>Hide logs</a>
+				<div className="info">Displaying logs may slow down the editor.</div>
+				<div className="info">Tho it's slow either way :D</div>
 				{
 					this.props.logs.map((event, key) => <Log key={key} value={event} />)
 				}

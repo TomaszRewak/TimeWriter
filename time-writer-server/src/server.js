@@ -9,10 +9,8 @@ import documentRepository from './../documents/document-repository'
 const port = process.env.PORT || 1337;
 const app = express();
 
-const origins = ['http://localhost:8080', 'http://text-sourcing.tomasz-rewak.com:80'];
-
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors({origin: origins}));
+app.use(cors({origin: ['http://localhost:8080', 'http://text-sourcing.tomasz-rewak.com']}));
 app.get(['/document/:documentId'], (req, res) => {
 	const documentState = documentRepository.getDocument(req.params.documentId).state;
 
@@ -22,7 +20,7 @@ app.get(['/document/:documentId'], (req, res) => {
 const server = http.Server(app);
 const io = new socketIO(server);
 
-io.origins(origins);
+io.origins(['http://localhost:8080', 'http://text-sourcing.tomasz-rewak.com:80']);
 io.on('connection', socket => {
 	console.log('Got connected!');
 
