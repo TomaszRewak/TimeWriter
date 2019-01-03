@@ -41,7 +41,6 @@ class Document extends Component {
 
 		this._socket = SocketIO(`${serverUrl}?document=${documentId}`);
 		this._socket.on('document change', event => {
-			this.logEvent(event);
 			this.applyEvent(event);
 		});
 
@@ -73,31 +72,25 @@ class Document extends Component {
 	}
 
 	sendEvent(event) {
-		this.logEvent(event);
+		event = {
+			...event,
+			timestamp: Date.now()
+		}
+
 		this.applyEvent(event);
-		this._socket.emit('document change', event, timestamp => {
-			if (timestamp)
-				this._textDocument.setTimestemp(event, timestamp);
-			else 
+		this._socket.emit('document change', event, success => {
+			if (!success)
 				this.reload(); // TODO: Needs to be implemented.
 		});
 	}
 
-	applyEvent(event) {
+	applyEvent(event, timestamp = null) {
 		this._textDocument.addEvent(event);
 
 		this.setState({
-			document: this._textDocument.state
+			document: this._textDocument.state,
+			logs: this._textDocument.history.slice(-5).map(n => n.event).reverse()
 		});
-	}
-
-	logEvent(event) {
-		this.setState({
-			logs: [
-				event,
-				...this.state.logs.slice(0, 5)
-			]
-		})
 	}
 
 	render() {

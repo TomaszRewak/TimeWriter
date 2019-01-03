@@ -33,27 +33,16 @@ export default class EventStore {
 		return true;
 	}
 
-	add(event, timestamp = null) {
+	add(event) {
 		this._assertCanAdd(event);
-
-		const index = this._chain.length;
 
 		this._chain.push({
 			event,
-			timestamp
+			state: null
 		});
 
-		this._eventStoreRepair.fix(this._chain, index);
+		this._eventStoreRepair.fix(this._chain);
 		this._eventStoreCleanup.cleanup(this._chain);
-		this._eventStoreState.updateCurrentState(this._chain);
-	}
-
-	setTimestamp(event, timestamp) {
-		const index = this._find(event);
-
-		this._chain[index].timestamp = timestamp;
-
-		this._eventStoreRepair.fix(this._chain, index);
 		this._eventStoreState.updateCurrentState(this._chain);
 	}
 

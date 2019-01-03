@@ -5,8 +5,9 @@ export default class TextDocument {
 		if (!history)
 			history = [
 				{
-					event: null,
-					timestamp: Date.now(),					
+					event: {
+						timestamp: Date.now()
+					},				
 					state: {
 						carets: [],
 						text: ''
@@ -25,13 +26,9 @@ export default class TextDocument {
 		return this._eventStore.state;
 	}
 
-	addEvent(event, timestamp) {
-		this._eventStore.add(event, timestamp);
+	addEvent(event) {
+		this._eventStore.add(event);
 
 		console.dir(this.history);
-	}
-
-	setTimestemp(event, timestamp) {
-		this._eventStore.setTimestamp(event, timestamp);
 	}
 }

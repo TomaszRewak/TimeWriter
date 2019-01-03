@@ -1,22 +1,6 @@
 export default class EventStoreCleanup {
 	_cleanupStates(chain) {
-		if (chain.length < 15)
-			return;
-
-		if (chain.length % 5 !== 0)
-			return;
-
-		let hasStateInRange = false;
-
-		for (let i = chain.length - 15; i < chain.length - 2; i++) {
-			if (!chain[i].state)
-				continue;
-
-			if (hasStateInRange)
-				delete chain[i].state;
-			else
-				hasStateInRange = true;
-		}
+		
 	}
 
 	_firstIndexWithState(chain) {
