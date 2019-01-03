@@ -5,11 +5,12 @@ export default class TextDocument {
 		if (!history)
 			history = [
 				{
+					event: null,
+					timestamp: Date.now(),					
 					state: {
 						carets: [],
 						text: ''
-					},
-					timestamp: Date.now()
+					}
 				}
 			];
 

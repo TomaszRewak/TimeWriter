@@ -31,23 +31,25 @@ io.on('connection', socket => {
 	const document = documentRepository.getDocument(documentId);
 
 	const add = (event) => {
-		console.log(event);
-
-		document.addEvent(event);
-		socket.broadcast.emit('document change', event);
-	};
-
-	socket.on('document change', (event, callback) => {
 		const timestamp = Date.now();
 
 		const signedEvent = {
 			...event,
-			timestamp,
 			author: socket.id
 		};
 
+		console.log(event);
+
+		document.addEvent(signedEvent, timestamp);
+		socket.broadcast.emit('document change', signedEvent);
+
+		return timestamp;
+	};
+
+	socket.on('document change', (event, callback) => {
+
 		try {
-			add(signedEvent);
+			const timestamp = add(event);
 			callback(timestamp);
 		}
 		catch (e) {
@@ -57,7 +59,7 @@ io.on('connection', socket => {
 
 	socket.on('disconnect', function () {
 		console.log('Got disconnected!');
-		add({ author: socket.id, type: 'manage-carets', operation: 'remove-carets' });
+		add({ type: 'manage-carets', operation: 'remove-carets' });
 	});
 });
 
