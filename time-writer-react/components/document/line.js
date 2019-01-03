@@ -17,7 +17,7 @@ export default class Line extends Component {
 	}
 
 	render() {
-		const text = this.prepareText()
+		const text = this.prepareText();
 
 		return (
 			<div className="line">

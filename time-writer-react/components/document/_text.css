@@ -14,6 +14,14 @@
 	color: rgb(118, 209, 106);
 }
 
+.line .text-fragment-operator {
+	color: rgb(118, 209, 106);
+}
+
+.line .text-fragment-type {
+	color: rgb(218, 46, 46);
+}
+
 .line .text-fragment-space {
 	position: relative;
 }
@@ -46,4 +54,5 @@
     top: -2px;
     position: absolute;
     margin: 0.5em 2px;
+    
 }

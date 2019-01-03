@@ -25,7 +25,9 @@ export default class WorkspaceItem extends Component {
 		return (
 			<div className={className}>
 				<div className='select-button' onClick={this.select}>{this.props.name}</div>
-				<div className='close-button' onClick={this.close}>ꭗ</div>
+				{this.props.canClose &&
+					<div className='close-button' onClick={this.close}>ꭗ</div>
+				}
 			</div>
 		);
 	}

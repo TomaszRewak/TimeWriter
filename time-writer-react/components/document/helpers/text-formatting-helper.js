@@ -1,4 +1,4 @@
-const formattingRules = [
+const patternRules = [
 	{
 		pattern: /\/\/.*/,
 		type: 'comment'
@@ -8,48 +8,85 @@ const formattingRules = [
 		type: 'string'
 	},
 	{
-		prefix: /\s|^/,
-		postfix: /\s|$/,
-		pattern: /if|for|while|foreach/,
-		type: 'statement'
-	},
+		pattern: /'[^']*'/,
+		type: 'string'
+	}
+];
+
+const looseRules = [
 	{
-		pattern: /[\(\)\{\}\[\]]/,
-		type: 'bracket'
-	},
-	{
-		pattern: / /,
+		patterns: [' '],
 		type: 'space'
 	},
 	{
-		pattern: /\t/,
+		patterns: ['\t'],
 		type: 'tab'
 	},
 	{
-		pattern: /bool/,
-		type: ''
+		patterns: ['(', ')', '[', ']', '{', '}', '<', '>'],
+		type: 'bracket'
 	},
 	{
-		pattern: /class/,
-		type: ''
-	},
-	{
-		pattern: /int/,
-		type: ''
-	},
-	{
-		pattern: /==/,
-		type: ''
+		patterns: ['=', '!', '|', '%', '&', '^', '$', '*', '+', '-', '.', '/', ',', ':'],
+		type: 'operator'
 	},
 ];
 
+const strictRules = [
+	{
+		patterns: ['if', 'else', 'for', 'while', 'foreach', 'class', 'function', 'constructor', 'return', 'export', 'default', 'import', '#include', 'from', 'in', 'of'],
+		type: 'statement'
+	},
+	{
+		patterns: ['bool', 'void', 'int', 'double', 'float', 'var', 'const', 'let', 'auto'],
+		type: 'type'
+	}
+];
+
 export default class TextFormattingHelper {
-	static applyFormattingRules(text) {
+	static applyDefaultRule(text) {
 		if (!text)
 			return [];
 
-		for (let rule of formattingRules) {
-			const match = new RegExp(rule.pattern).exec(text);
+		return [{ text: text, type: 'plain' }];
+	}
+
+	static applyStrictRules(text) {
+		for (const rule of strictRules) {
+			for (const pattern of rule.patterns) {
+				if (text !== pattern)
+					continue;
+
+				return [{ text: pattern, type: rule.type }];
+			}
+		}
+
+		return TextFormattingHelper.applyDefaultRule(text);
+	}
+
+	static applyLooseRules(text) {
+		for (const rule of looseRules) {
+			for (const pattern of rule.patterns) {
+				if (!text.includes(pattern))
+					continue;
+
+				const [head, ...tail] = text
+					.split(pattern)
+					.map(fragment => TextFormattingHelper.applyLooseRules(fragment));
+
+				return [
+					head,
+					...tail.map(fragment => [{ text: pattern, type: rule.type }, ...fragment])
+				].flat();
+			}
+		}
+
+		return TextFormattingHelper.applyStrictRules(text);
+	}
+
+	static applyPatternRules(text) {
+		for (const rule of patternRules) {
+			const match = rule.pattern.exec(text);
 
 			if (!match)
 				continue;
@@ -59,14 +96,19 @@ export default class TextFormattingHelper {
 			const endIndex = startIndex + matchText.length;
 
 			return [
-				TextFormattingHelper.applyFormattingRules(text.substring(0, startIndex)),
+				TextFormattingHelper.applyPatternRules(text.substring(0, startIndex)),
 				{ text: matchText, type: rule.type },
-				TextFormattingHelper.applyFormattingRules(text.substring(endIndex, text.length))
+				TextFormattingHelper.applyPatternRules(text.substring(endIndex, text.length))
 			].flat();
 		}
 
-		return [
-			{ text: text, type: 'plain' }
-		];
+		return TextFormattingHelper.applyLooseRules(text);
+	}
+
+	static applyFormattingRules(text) {
+		if (!text)
+			return [];
+
+		return this.applyPatternRules(text);
 	}
 }

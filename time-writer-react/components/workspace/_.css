@@ -6,10 +6,6 @@
 	height: 100vh;
 }
 
-.workspace.blurred {
-	filter: blur(2px);
-}
-
 .workspace-bar {
 	display: flex;
 	flex-direction: row;
@@ -20,12 +16,6 @@
 .workspace-bar-items {
 	display: flex;
 	flex-direction: row;
-}
-
-.workspace-bar-info {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
 }
 
 .workspace-item {
@@ -95,9 +85,15 @@
 	color: rgb(67, 99, 187);
 }
 
+.workspace-bar-info {
+	display: flex;
+	color: #4a4a4a;
+	flex-direction: row;
+	align-items: center;
+}
+
 .workspace-bar-info>.me {
 	font-size: 17px;
-	color: #4a4a4a;
 	position: relative;
 }
 
@@ -118,4 +114,14 @@
 	position: absolute;
 	z-index: 3;
 	opacity: 1;
+	top: 100%;
+}
+
+.workspace-bar-info>a {
+	text-decoration: node;
+	color: inherit;
+}
+
+.workspace-bar-info>* {
+	margin-right: 7px;
 }

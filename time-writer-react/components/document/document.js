@@ -29,8 +29,8 @@ class Document extends Component {
 	async componentDidMount() {
 		const documentId = this.props.id;
 
-		//const serverUrl = `http://localhost:1337`;
-		const serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
+		const serverUrl = `http://localhost:1337`;
+		//const serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
 
 		const response = await fetch(`${serverUrl}/document/${documentId}`);
 		const currentState = await response.json();
@@ -49,7 +49,7 @@ class Document extends Component {
 	}
 
 	componentWillUnmount() {
-		this._socket.disconnect() 
+		this._socket.disconnect()
 	}
 
 	keyDown(e) {
@@ -57,6 +57,9 @@ class Document extends Component {
 
 		for (const event of events)
 			this.sendEvent(event);
+
+		// e.preventDefault();
+		// e.stopPropagation();
 	}
 
 	click(e) {
@@ -64,13 +67,19 @@ class Document extends Component {
 
 		for (const event of events)
 			this.sendEvent(event);
+
+		// e.preventDefault();
+		// e.stopPropagation();
 	}
 
 	sendEvent(event) {
 		this.logEvent(event);
 		this.applyEvent(event);
 		this._socket.emit('document change', event, timestamp => {
-			event.timestamp = timestamp;
+			if (timestamp)
+				this._textDocument.setTimestemp(event, timestamp);
+			else 
+				this.reload(); // TODO: Needs to be implemented.
 		});
 	}
 
@@ -97,11 +106,13 @@ class Document extends Component {
 
 		return (
 			<div className="document-scope">
-				<div className="document" tabIndex="0" onKeyDown={this.keyDown}>
-					<LineNumbers text={this.state.document.text} />
-					<div className="document-content" onClick={this.click} >
-						<Carets document={this.state.document} />
-						<Lines text={this.state.document.text} />
+				<div className="document-scroll">
+					<div className="document" >
+						<LineNumbers text={this.state.document.text} />
+						<div className="document-content" tabIndex="0" onKeyDown={this.keyDown} onMouseDown={this.click} >
+							<Carets document={this.state.document} />
+							<Lines text={this.state.document.text} />
+						</div>
 					</div>
 				</div>
 				<Logs logs={this.state.logs} />

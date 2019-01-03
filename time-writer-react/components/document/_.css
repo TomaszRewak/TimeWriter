@@ -21,16 +21,19 @@
 	flex-direction: row;
 }
 
-.document {
+.document-scroll {	
+	flex: 1;
 	overflow-y: auto;
+}
+
+.document {
 	color: #dddddd;
 	font-family: 'Inconsolata', monospace;
 	font-size: 14px;
 	display: flex;
 	flex-direction: row;
 	background-color: #28292b;
-	outline: none;
-	flex: 1;
+	min-height: 100%;
 }
 
 .document .line-numbers {
@@ -45,6 +48,7 @@
 	position: relative;
 	margin: 5px;
 	flex: 1;
+	outline: none;
 }
 
 .document .document-content .lines {

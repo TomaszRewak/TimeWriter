@@ -10,11 +10,12 @@ const port = process.env.PORT || 1337;
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors({origin: ['http://localhost:8080', 'http://text-sourcing.tomasz-rewak.com']}));
+app.use(cors({ origin: ['http://localhost:8080', 'http://text-sourcing.tomasz-rewak.com'] }));
 app.get(['/document/:documentId'], (req, res) => {
-	const documentState = documentRepository.getDocument(req.params.documentId).state;
+	const document = documentRepository.getDocument(req.params.documentId).history;
+	console.dir(document);
 
-	res.json(documentState);
+	res.json(document);
 });
 
 const server = http.Server(app);
@@ -45,13 +46,18 @@ io.on('connection', socket => {
 			author: socket.id
 		};
 
-		add(signedEvent);
-		callback(timestamp);
+		try {
+			add(signedEvent);
+			callback(timestamp);
+		}
+		catch (e) {
+			callback(null);
+		}
 	});
 
 	socket.on('disconnect', function () {
 		console.log('Got disconnected!');
-		add({author: socket.id, type: 'manage-carets', operation: 'remove-carets'});
+		add({ author: socket.id, type: 'manage-carets', operation: 'remove-carets' });
 	});
 });
 

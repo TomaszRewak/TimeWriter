@@ -1,48 +1,36 @@
-﻿import EventStore from "./event-processing/event-store";
-import EventReducer from "./event-processing/event-reducer";
-import { shakspeareSampleText } from "../samples/sample-text";
+﻿import EventStore from "./event-history/event-store";
 
 export default class TextDocument {
-	constructor(state) {
-		if (!state)
-			state = {
-				carets: [],
-				text: ''
-			};
+	constructor(history) {
+		if (!history)
+			history = [
+				{
+					state: {
+						carets: [],
+						text: ''
+					},
+					timestamp: Date.now()
+				}
+			];
 
-		this._documentState = state;
+		this._eventStore = new EventStore(history);
+	}
 
-		this._eventStore = new EventStore();
-		this._eventReducer = new EventReducer();
+	get history() {
+		return this._eventStore.history;
 	}
 
 	get state() {
-		return this._documentState;
+		return this._eventStore.state;
 	}
 
-	addEvent(event) {
-		if (this._requiresReversal(event))
-			this._undermineLastEvent(event);
-		else
-			this._applyEvent(event);
+	addEvent(event, timestamp) {
+		this._eventStore.add(event, timestamp);
+
+		console.dir(this.history);
 	}
 
-	_requiresReversal(event) {
-		return (
-			this._eventStore.hasEvents()
-			&&
-			this._eventStore.lastEvent().timeStamp > event.timeStamp
-		);
-	}
-
-	_undermineLastEvent(event) {
-		const lastEvent = this._eventStore.popEvent();
-
-		this.addEvent(event);
-		this.addEvent(lastEvent);
-	}
-
-	_applyEvent(event) {
-		this._documentState = this._eventReducer.reduce(this._documentState, event);
+	setTimestemp(event, timestamp) {
+		this._eventStore.setTimestamp(event, timestamp);
 	}
 }

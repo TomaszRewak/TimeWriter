@@ -14,12 +14,14 @@ export default class WorkspaceBar extends Component {
 								name={document}
 								isSelected={document === this.props.selectedDocument}
 								onClose={this.props.onClose}
-								onSelect={this.props.onSelect} />
+								onSelect={this.props.onSelect}
+								canClose={this.props.documents.length > 1} />
 						)
 					}
 					<NewFile onAdd={this.props.onAdd} />
 				</div>
 				<div className='workspace-bar-info'>
+					<a href="https://github.com/TomaszRewak/TimeWriter" target="_blank">github</a>
 					<div className="me">
 						ⓘ
 						<img src="me.png" title="ale fruwa" />

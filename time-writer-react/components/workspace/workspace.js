@@ -60,15 +60,9 @@ export default class Workspace extends Component {
 	}
 
 	render() {
-		let workspaceClassName = 'workspace';
-
-		if (this.state.showFileCreator)
-			workspaceClassName = `${workspaceClassName} blurred`;
-
 		return (
 			<div className='workspace-container'>
-				{this.state.showFileCreator && <NewFile onCancel={this.hideFileCreator} />}
-				<div className={workspaceClassName}>
+				<div className='workspace'>
 					<WorkspaceBar
 						documents={this.state.documents}
 						selectedDocument={this.state.selectedDocument}
