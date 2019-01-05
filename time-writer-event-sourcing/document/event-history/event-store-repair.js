@@ -12,28 +12,25 @@ export default class EventStoreRepair {
 	}
 
 	_isTooFarAhead(chain, index) {
-		if (!this._inRange(chain, index - 1))
+		if (!this._inRange(chain, index + 1))
 			return false;
 
-		return this._getTimestamp(chain, index) < this._getTimestamp(chain, index - 1);
+		return this._getTimestamp(chain, index) < this._getTimestamp(chain, index + 1);
 	}
 
 	_moveBackward(chain, index) {
-		const temp = chain[index - 1];
-		chain[index - 1] = chain[index];
+		const temp = chain[index + 1];
+		chain[index + 1] = chain[index];
 		chain[index] = temp;
 
 		this._cleanState(chain, index);
-		this._cleanState(chain, index - 1)
+		this._cleanState(chain, index + 1)
 	}
 
 	fix(chain) {
-		let index = chain.length - 1;
+		let index = 0;
 
-		while (this._isTooFarAhead(chain, index)) {
-			this._moveBackward(chain, index);
-			index = index - 1;
-			console.log('<<');
-		}
+		while (this._isTooFarAhead(chain, index))
+			this._moveBackward(chain, index++);
 	}
 }

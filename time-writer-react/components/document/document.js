@@ -89,7 +89,7 @@ class Document extends Component {
 
 		this.setState({
 			document: this._textDocument.state,
-			logs: this._textDocument.history.slice(-5).map(n => n.event).reverse()
+			logs: this._textDocument.history.slice(0, 5).map(n => n.event)
 		});
 	}
 

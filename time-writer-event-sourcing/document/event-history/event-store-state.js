@@ -14,7 +14,7 @@ export default class EventStoreState {
 			else
 				revertions--;
 
-			index--;
+			index++;
 		}
 		while (revertions > 0);
 
@@ -40,8 +40,6 @@ export default class EventStoreState {
 	}
 
 	updateCurrentState(chain) {
-		let lastIndex = chain.length - 1;
-
-		chain[lastIndex].state = this._getState(chain, lastIndex);
+		chain[0].state = this._getState(chain, 0);
 	}
 }
