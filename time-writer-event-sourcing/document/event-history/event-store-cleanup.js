@@ -1,11 +1,13 @@
 export default class EventStoreCleanup {
 	_cleanupStates(chain) {
+		const cleanupStart = this._firstIndexWithState(chain, Math.max(1, chain.length - 10));
+		const cleanupEnd = chain.length - 1;
 		
+		for (let index = cleanupStart + 1; index < cleanupEnd; index++)
+			chain[index].state = null;
 	}
 
-	_firstIndexWithState(chain) {
-		let index = 0;
-
+	_firstIndexWithState(chain, index = 0) {
 		while (!chain[index].state)
 			index++;
 
@@ -21,7 +23,7 @@ export default class EventStoreCleanup {
 	}
 
 	cleanup(chain) {
-		this._cleanupStates(chain);
 		this._cleanupLength(chain);
+		this._cleanupStates(chain);
 	}
 }

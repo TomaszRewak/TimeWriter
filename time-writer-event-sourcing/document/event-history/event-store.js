@@ -2,6 +2,7 @@ import EventReducer from "../event-processing/event-reducer";
 import EventStoreRepair from "./event-store-repair";
 import EventStoreState from "./event-store-state";
 import EventStoreCleanup from "./event-store-cleanup";
+import EventStoreValidation from "./event-store-validation";
 
 export default class EventStore {
 	constructor(history) {
@@ -11,39 +12,27 @@ export default class EventStore {
 		this._eventStoreRepair = new EventStoreRepair();
 		this._eventStoreState = new EventStoreState();
 		this._eventStoreCleanup = new EventStoreCleanup();
+		this._eventStoreValidation = new EventStoreValidation();
 	}
 
-	_find(event) {
-		for (let i = this._chain.length - 1; i >= 0; i--)
-			if (this._chain[i].event === event)
-				return i;
-
-		throw new Error('Event not found');
-	}
-
-	_assertCanAdd(event) {
-		if (event.type === 'revert') {
-			let revertEvents = this._chain
-				.filter(node => node.event && node.event.type === 'revert')
-				.length;
-
-			return revertEvents + 1 < this._chain.length;
-		}
-
-		return true;
-	}
-
-	add(event) {
-		this._assertCanAdd(event);
-
+	_pushEvent(event) {
 		this._chain.push({
 			event,
 			state: null
 		});
+	}
+
+	add(event) {
+		if (!this._eventStoreValidation.canAddEvent(this._chain, event))
+			return false;
+
+		this._pushEvent(event);
 
 		this._eventStoreRepair.fix(this._chain);
-		this._eventStoreCleanup.cleanup(this._chain);
 		this._eventStoreState.updateCurrentState(this._chain);
+		this._eventStoreCleanup.cleanup(this._chain);
+
+		return true;
 	}
 
 	get history() {
