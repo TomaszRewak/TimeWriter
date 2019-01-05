@@ -15,22 +15,27 @@ export default class EventStore {
 		this._eventStoreValidation = new EventStoreValidation();
 	}
 
-	_pushEvent(event) {
-		this._chain.push({
-			event,
-			state: null
-		});
+	_reduceChain(event) {
+		return [
+			...this._chain,
+			{
+				event,
+				state: null
+			}
+		];
 	}
 
 	add(event) {
 		if (!this._eventStoreValidation.canAddEvent(this._chain, event))
 			return false;
 
-		this._pushEvent(event);
+		const newChain = this._reduceChain(event)
 
-		this._eventStoreRepair.fix(this._chain);
-		this._eventStoreState.updateCurrentState(this._chain);
-		this._eventStoreCleanup.cleanup(this._chain);
+		this._eventStoreRepair.fix(newChain);
+		this._eventStoreState.updateCurrentState(newChain);
+		this._eventStoreCleanup.cleanup(newChain);
+
+		this._chain = newChain;
 
 		return true;
 	}

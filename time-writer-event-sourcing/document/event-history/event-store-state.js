@@ -16,7 +16,7 @@ export default class EventStoreState {
 
 			index--;
 		}
-		while (revertions > 0)
+		while (revertions > 0);
 
 
 		return index;
