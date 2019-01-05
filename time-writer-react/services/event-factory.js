@@ -3,6 +3,8 @@ export default class EventFactory {
 		const key = e.keyCode;
 		const char = e.key;
 
+		if (key === 90 && e.ctrlKey)
+			return [this.prepareRevertEvent()]
 		if (key === 37)
 			return [this.prepareMoveLeftEvent()];
 		if (key === 39)
@@ -38,6 +40,10 @@ export default class EventFactory {
 			this.prepareRemoveCaretsEvent(),
 			this.prepareAddCaretEvent(coordinates)
 		]
+	}
+
+	prepareRevertEvent() {
+		return { type: 'revert' };
 	}
 
 	prepareMoveLeftEvent() {

@@ -6,10 +6,27 @@ export default class EventStoreState {
 	}
 
 	_getPreviousStateIndex(chain, index) {
-		if (chain[index].event.type === 'revert')
-			return index - 2;
+		let revertions = 0;
+
+		do {
+			if (chain[index].event.type === 'revert')
+				revertions++;
+			else
+				revertions--;
+
+			index--;
+		}
+		while (revertions > 0)
+
+
+		return index;
+	}
+
+	_reduceState(state, event) {
+		if (event.type === 'revert')
+			return state;
 		else
-			return index - 1;
+			return this._eventReducer.reduce(state, event);
 	}
 
 	_getState(chain, index) {
@@ -17,9 +34,9 @@ export default class EventStoreState {
 			return chain[index].state;
 
 		const previousStateIndex = this._getPreviousStateIndex(chain, index);
-		const previousState = chain[previousStateIndex].state;
+		const previousState = this._getState(chain, previousStateIndex);
 
-		return this._eventReducer.reduce(previousState, chain[index].event);
+		return this._reduceState(previousState, chain[index].event);
 	}
 
 	updateCurrentState(chain) {
