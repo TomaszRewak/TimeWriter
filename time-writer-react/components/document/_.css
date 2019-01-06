@@ -48,7 +48,6 @@
 	position: relative;
 	margin: 5px;
 	flex: 1;
-	outline: none;
 }
 
 .document .document-content .lines {
@@ -78,4 +77,13 @@
 
 .document .document-content .lines .line, .document .document-content .carets, .document .line-numbers .line-number {
 	height: 1.2em;
+}
+
+.document .document-content .input-interceptor {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+	outline: none;
 }

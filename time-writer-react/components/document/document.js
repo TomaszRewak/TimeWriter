@@ -19,6 +19,7 @@ class Document extends Component {
 
 		this.keyDown = this.keyDown.bind(this);
 		this.click = this.click.bind(this);
+		this.paste = this.paste.bind(this);
 
 		this.state = {
 			document: null,
@@ -71,6 +72,11 @@ class Document extends Component {
 		// e.stopPropagation();
 	}
 
+	paste(e) {
+		const event = this._eventFactory.prepareInsertEvent(e.clipboardData.getData('Text'));
+		this.sendEvent(event);
+	}
+
 	sendEvent(event) {
 		event = {
 			...event,
@@ -102,9 +108,10 @@ class Document extends Component {
 				<div className="document-scroll">
 					<div className="document" >
 						<LineNumbers text={this.state.document.text} />
-						<div className="document-content" tabIndex="0" onKeyDown={this.keyDown} onMouseDown={this.click} >
+						<div className="document-content">
 							<Carets document={this.state.document} />
 							<Lines text={this.state.document.text} />
+							<div className="input-interceptor" tabIndex="0" onKeyDown={this.keyDown} onMouseDown={this.click} onPaste={this.paste} />
 						</div>
 					</div>
 				</div>

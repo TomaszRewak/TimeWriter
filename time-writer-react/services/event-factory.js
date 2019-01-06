@@ -3,6 +3,8 @@ export default class EventFactory {
 		const key = e.keyCode;
 		const char = e.key;
 
+		if (key === 86 && e.ctrlKey)
+			return [];
 		if (key === 90 && e.ctrlKey)
 			return [this.prepareUndoEvent()];
 		if (key === 89 && e.ctrlKey)
