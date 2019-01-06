@@ -22,13 +22,14 @@ export default class VerticalNavigationEventReducer {
 	}
 
 	_reduceOwnedCaret(text, caret, event) {
-		const caretCoordinates = this.textNavigationService.getCaretCoordinates(text, caret.position);
+		const caretCoordinates = this.textNavigationService.getCaretCoordinates(text, caret.beginPosition);
 		const newCaretCoordinates = this._reduceCaretCoordinatesBy(caret, caretCoordinates, event.offset);
 		const newCaretPosition = this.textNavigationService.getCaretPosition(text, newCaretCoordinates);
 
 		return {
 			...caret,
-			position: newCaretPosition,
+			beginPosition: newCaretPosition,
+			endPosition: newCaretPosition,
 			lastOperation: 'navigation vertical',
 			verticalNavigationColumn: newCaretCoordinates.column
 		};

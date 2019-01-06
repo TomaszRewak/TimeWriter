@@ -32,6 +32,7 @@ export default class EventStore {
 			this._eventStoreCleanup.cleanup(newChain);
 		}
 		catch(e) {
+			console.dir(e);
 			return false;
 		}
 

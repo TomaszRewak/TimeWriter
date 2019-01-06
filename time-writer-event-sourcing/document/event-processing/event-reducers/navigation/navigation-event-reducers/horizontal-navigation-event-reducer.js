@@ -1,21 +1,26 @@
 ﻿export default class HorizontalNavigationEventReducer {
 	reduce(document, event) {
-		const maxPosition = document.text.length;
-
 		return {
 			...document,
-			carets: document.carets.map(caret => this._reduceCaret(caret, maxPosition, event))
+			carets: document.carets.map(caret => this._reduceCaret(document, event, caret))
 		};
 	}
 
-	_reduceCaret(caret, maxPosition, event) {
+	_reduceCaret(document, event, caret) {
 		if (caret.owner !== event.author)
 			return caret;
 
+		const newPosition = this._clipPosition(document, caret.beginPosition + event.offset);
+
 		return {
 			...caret,
-			position: Math.max(0, Math.min(maxPosition, caret.position + event.offset)),
+			beginPosition: newPosition,
+			endPosition: newPosition,
 			lastOperation: 'navigation horizontal'
 		};
+	}
+
+	_clipPosition(document, position) {
+		return Math.max(0, Math.min(document.text.length, position));
 	}
 }

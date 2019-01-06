@@ -1,8 +1,11 @@
 ﻿import DeletionEventTextReducer from "./deletion-event-text-reducer";
 import DeletionEventCaretReducer from "./deletion-event-caret-reducer";
+import DeletionEventPreProcessor from "./deletion-event-pre-processing";
 
 export default class DeletionEventReducer {
 	constructor() {
+		this._eventPreProcessor = new DeletionEventPreProcessor();
+
 		this._textReducer = new DeletionEventTextReducer();
 		this._caretReducer = new DeletionEventCaretReducer();
 	}
@@ -18,15 +21,12 @@ export default class DeletionEventReducer {
 		if (event.author !== caret.owner)
 			return document;
 
-		event = {
-			...event,
-			caret
-		}
+		event = this._eventPreProcessor.prepareEvent(document, event, caret);
 
 		return {
 			...document,
 			text: this._textReducer.reduce(document, event),
 			carets: this._caretReducer.reduce(document, event)
 		};
-	}
+	}	
 }

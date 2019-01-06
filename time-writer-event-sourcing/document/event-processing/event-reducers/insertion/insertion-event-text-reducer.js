@@ -1,7 +1,7 @@
 ﻿export default class InsertionEventTextReducer {
 	reduce(document, event) {
-		const firstTextPart = document.text.substring(0, event.caret.position);
-		const secondTextPart = document.text.substring(event.caret.position);
+		const firstTextPart = document.text.substring(0, event.beginPosition);
+		const secondTextPart = document.text.substring(event.endPosition);
 
 		return `${firstTextPart}${event.text}${secondTextPart}`;
 	}

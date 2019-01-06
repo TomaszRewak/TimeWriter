@@ -4,13 +4,22 @@
 	}
 
 	_reduceCaret(caret, event) {
-		if (caret.position < event.caret.position)
+		if (caret.endPosition < event.beginPosition)
 			return caret;
 
 		return {
 			...caret,
-			position: caret.position + event.text.length,
+			beginPosition: this._reducePosition(caret.beginPosition, event),
+			endPosition: this._reducePosition(caret.endPosition, event),
 			lastOperation: 'insertion'
 		};
+	}
+
+	_reducePosition(position, event) {
+		if (position < event.beginPosition)
+			return position;
+		if (position <= event.endPosition)
+			return event.beginPosition + event.text.length;
+		return position - (event.endPosition - event.beginPosition) + event.text.length;
 	}
 }

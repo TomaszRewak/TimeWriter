@@ -12,7 +12,8 @@ export default class InsertionEventPreProcessor
 		return {
 			...event,
 			text: this._prepareEventText(document, event, caret),
-			caret
+			beginPosition: caret.beginPosition,
+			endPosition: caret.endPosition
 		}
 	}
 
@@ -21,7 +22,7 @@ export default class InsertionEventPreProcessor
 		if (event.text !== '\n')
 			return event.text;
 
-		let indent = this._textFormattingService.getIndentAtPosition(document.text, caret.position);
+		let indent = this._textFormattingService.getIndentAtPosition(document.text, caret.beginPosition);
 
 		return `\n${'\t'.repeat(indent)}`
 	}

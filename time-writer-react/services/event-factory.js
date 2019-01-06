@@ -64,11 +64,11 @@ export default class EventFactory {
 	}
 
 	prepareBackwardDeleteEvent() {
-		return { type: 'delete', mode: 'backward', length: 1 };
+		return { type: 'delete', mode: 'backward' };
 	}
 
 	prepareForwardDeleteEvent() {
-		return { type: 'delete', mode: 'forward', length: 1 };
+		return { type: 'delete', mode: 'forward' };
 	}
 
 	prepareInsertEvent(text) {

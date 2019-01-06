@@ -1,32 +1,25 @@
 ﻿export default class DeletionEventCaretReducer {
 	reduce(document, event) {
-		switch (event.mode) {
-			case 'backward':
-				return document.carets.map(caret => this._reduceCaretBackward(document, caret, event));
-			case 'forward':
-				return document.carets.map(caret => this._reduceCaretForward(document, caret, event));
-		}
+		return document.carets.map(caret => this._reduceCaret(caret, event));
 	}
 
-	_reduceCaretBackward(document, caret, event) {
-		if (caret.position < event.caret.position)
+	_reduceCaret(caret, event) {
+		if (caret.endPosition <= event.beginPosition)
 			return caret;
 
 		return {
 			...caret,
-			position: Math.max(0, caret.position - event.length),
-			lastOperation: 'deletion backward'
+			beginPosition: this._reducePosition(caret.beginPosition, event),
+			endPosition: this._reducePosition(caret.endPosition, event),
+			lastOperation: 'deletion'
 		};
 	}
 
-	_reduceCaretForward(document, caret, event) {
-		if (caret.position <= event.caret.position)
-			return caret;
-
-		return {
-			...caret,
-			position: Math.min(document.text.length - event.length, caret.position - event.length),
-			lastOperation: 'deletion forward'
-		};
+	_reducePosition(position, event) {
+		if (position <= event.beginPosition)
+			return position;
+		if (position <= event.endPosition)
+			return event.beginPosition;
+		return position - (event.endPosition - event.beginPosition);
 	}
 }
