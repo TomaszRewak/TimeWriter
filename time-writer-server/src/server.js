@@ -26,7 +26,7 @@ io.on('connection', socket => {
 	console.log('Got connected!');
 
 	let documentId = socket.handshake.query.document;
-	console.dir(documentId);
+	socket.join(documentId);
 
 	const document = documentRepository.getDocument(documentId);
 
@@ -37,7 +37,7 @@ io.on('connection', socket => {
 		};
 
 		document.addEvent(signedEvent);
-		socket.broadcast.emit('document change', signedEvent);
+		socket.broadcast.to(documentId).emit('document change', signedEvent);
 	};
 
 	socket.on('document change', (event, callback) => {
