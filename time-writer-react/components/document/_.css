@@ -79,11 +79,28 @@
 	height: 1.2em;
 }
 
-.document .document-content .input-interceptor {
+.document .document-content .input-panel {
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.document .document-content .input-panel > .input-interceptor {
 	position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
 	outline: none;
+}
+
+.document .document-content .input-panel > .character-template {
+	height: 1.2em;
+	width: 1ch;
+}
+
+.document .document-content .input-panel > .carets {
+	opacity: 0.3;
 }

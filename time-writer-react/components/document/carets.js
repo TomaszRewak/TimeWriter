@@ -11,11 +11,10 @@ export default class Carets extends Component {
 
 	prepareCarets() {
 		return this.props
-			.document
 			.carets
 			.map(caret => ({
 				...caret,
-				...this.textNavigationService.getCaretCoordinates(this.props.document.text, caret.position)
+				...this.textNavigationService.getCaretCoordinates(this.props.text, caret.position)
 			}))
 			.map((caret, i) => <Caret key={i} owner={caret.owner} line={caret.line} column={caret.column} />);
 	}

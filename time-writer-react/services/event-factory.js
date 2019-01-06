@@ -32,17 +32,10 @@ export default class EventFactory {
 		return [];
 	}
 
-	prepareClickEvents(e) {
-		const rect = e.target.getBoundingClientRect();
-
-		const coordinates = {
-			line: Math.floor((e.clientY - rect.top) / 16.797),
-			column: Math.round((e.clientX - rect.left) / 7)
-		}
-
+	prepareClickEvents(e, mousePosition) {
 		return [
 			this.prepareRemoveCaretsEvent(),
-			this.prepareAddCaretEvent(coordinates)
+			this.prepareAddCaretEvent(mousePosition)
 		]
 	}
 

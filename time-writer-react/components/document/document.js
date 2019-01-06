@@ -7,9 +7,9 @@ import Lines from './lines';
 import LineNumbers from './line-numbers';
 import { TextDocument } from '../../external/event-sourcing';
 import SocketIO from 'socket.io-client';
-import { get } from 'http';
-import EventFactory from '../../services/event-factory';
 import Logs from '../logs/logs';
+import InputPanel from './input-panel';
+import EventFactory from '../../services/event-factory';
 
 class Document extends Component {
 	constructor(props) {
@@ -17,14 +17,12 @@ class Document extends Component {
 
 		this._eventFactory = new EventFactory();
 
-		this.keyDown = this.keyDown.bind(this);
-		this.click = this.click.bind(this);
-		this.paste = this.paste.bind(this);
-
 		this.state = {
 			document: null,
 			logs: []
 		}
+
+		this.sendEvent = this.sendEvent.bind(this);
 	}
 
 	async componentDidMount() {
@@ -45,36 +43,11 @@ class Document extends Component {
 			this.applyEvent(event);
 		});
 
-		this.sendEvent(this._eventFactory.prepareAddCaretEvent({ line: 0, column: 0 }));
+		//this.sendEvent(this._eventFactory.prepareAddCaretEvent({ line: 0, column: 0 }));
 	}
 
 	componentWillUnmount() {
 		this._socket.disconnect()
-	}
-
-	keyDown(e) {
-		const events = this._eventFactory.prepareKeyDownEvents(e);
-
-		for (const event of events)
-			this.sendEvent(event);
-
-		// e.preventDefault();
-		// e.stopPropagation();
-	}
-
-	click(e) {
-		const events = this._eventFactory.prepareClickEvents(e);
-
-		for (const event of events)
-			this.sendEvent(event);
-
-		// e.preventDefault();
-		// e.stopPropagation();
-	}
-
-	paste(e) {
-		const event = this._eventFactory.prepareInsertEvent(e.clipboardData.getData('Text'));
-		this.sendEvent(event);
 	}
 
 	sendEvent(event) {
@@ -109,9 +82,9 @@ class Document extends Component {
 					<div className="document" >
 						<LineNumbers text={this.state.document.text} />
 						<div className="document-content">
-							<Carets document={this.state.document} />
+							<Carets text={this.state.document.text} carets={this.state.document.carets} />
 							<Lines text={this.state.document.text} />
-							<div className="input-interceptor" tabIndex="0" onKeyDown={this.keyDown} onMouseDown={this.click} onPaste={this.paste} />
+							<InputPanel text={this.state.document.text} onNewEvent={this.sendEvent} />
 						</div>
 					</div>
 				</div>
