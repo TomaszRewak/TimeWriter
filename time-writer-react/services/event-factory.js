@@ -4,7 +4,9 @@ export default class EventFactory {
 		const char = e.key;
 
 		if (key === 90 && e.ctrlKey)
-			return [this.prepareRevertEvent()]
+			return [this.prepareUndoEvent()];
+		if (key === 89 && e.ctrlKey)
+			return [this.prepareRedoEvent()];
 		if (key === 37)
 			return [this.prepareMoveLeftEvent()];
 		if (key === 39)
@@ -42,8 +44,12 @@ export default class EventFactory {
 		]
 	}
 
-	prepareRevertEvent() {
-		return { type: 'revert' };
+	prepareUndoEvent() {
+		return { type: 'undo' };
+	}
+
+	prepareRedoEvent() {
+		return { type: 'redo' };
 	}
 
 	prepareMoveLeftEvent() {
