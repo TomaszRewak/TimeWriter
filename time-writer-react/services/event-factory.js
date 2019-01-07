@@ -32,10 +32,12 @@ export default class EventFactory {
 		return [];
 	}
 
-	prepareClickEvents(e, mousePosition) {
+	prepareClickEvents(e, coordinates) {
+		if (e.shiftKey)
+			return [this.prepareSelectEvent(coordinates)]
 		return [
 			this.prepareRemoveCaretsEvent(),
-			this.prepareAddCaretEvent(mousePosition)
+			this.prepareAddCaretEvent(coordinates)
 		]
 	}
 
@@ -83,4 +85,7 @@ export default class EventFactory {
 		return { type: 'manage-carets', operation: 'remove-carets' };
 	}
 
+	prepareSelectEvent(coordinates) {
+		return { type: 'manage-carets', operation: 'select', coordinates };
+	}
 }

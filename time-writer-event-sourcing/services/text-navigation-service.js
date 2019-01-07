@@ -9,6 +9,15 @@
 		return counter;
 	}
 
+	getColumn(text, position) {
+		let length = 0;
+
+		for (let i = position; i > 0 && text[i - 1] != '\n'; i--)
+			length++;
+
+		return length;
+	}
+
 	getCaretCoordinates(text, position) {
 		position = this._clipPosition(position, text);
 
@@ -20,7 +29,7 @@
 		return coordinates;
 	}
 
-	getCaretPosition(text, coordinates) {			
+	getCaretPosition(text, coordinates) {
 		let position = 0;
 
 		let pointerCoordinates = { line: 0, column: 0 };
@@ -31,6 +40,25 @@
 
 		while (pointerCoordinates.column < targetCoordinates.column && position < text.length && text[position] !== '\n')
 			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
+
+		return position;
+	}
+
+	getEndOfLineColumn(text, position) {
+		let number = 0;
+
+		for (let i = position; i > 0 && text[i - 1] != '\n'; i--)
+			number += this._getCharacterLength(text[i - 1]);
+
+		for (let i = position; i < text.length && text[i] != '\n'; i++)
+			number += this._getCharacterLength(text[i]);
+
+		return number;
+	}
+
+	getEndOfLinePosition(text, position) {
+		while (position < text.length && text[position] != '\n')
+			position++;
 
 		return position;
 	}
@@ -53,12 +81,16 @@
 	}
 
 	_reduceCoordinates(coordinates, character) {
-		const tabSize = 4;
-
 		switch (character) {
 			case '\n': return { column: 0, line: coordinates.line + 1 };
-			case '\t': return { column: coordinates.column + tabSize, line: coordinates.line }
-			default: return { column: coordinates.column + 1, line: coordinates.line };
+			default: return { column: coordinates.column + this._getCharacterLength(character), line: coordinates.line };
+		}
+	}
+
+	_getCharacterLength(character) {
+		switch (character) {
+			case '\t': return 4
+			default: return 1;
 		}
 	}
 }

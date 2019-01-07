@@ -13,8 +13,8 @@ export default class DeletionEventPreProcessor {
 	_prepareRange(event, caret) {
 		if (caret.beginPosition != caret.endPosition)
 			return {
-				beginPosition: event.caret.beginPosition,
-				endPosition: event.caret.endPosition
+				beginPosition: caret.beginPosition,
+				endPosition: caret.endPosition
 			}
 		if (event.mode == 'backward')
 			return {

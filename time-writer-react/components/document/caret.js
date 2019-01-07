@@ -21,14 +21,31 @@ export default class Caret extends Component {
 		return caretColors[hash % caretColors.length]
 	}
 
-	render() {
+	prepareRange(range, i) {
 		const style = {
-			left: `${this.props.column}00%`,
-			top: `${this.props.line}00%`,
+			left: `${range.column}00%`,
+			top: `${range.line}00%`,
+			width: `${range.length}00%`,
 			backgroundColor: this.getColor(),
 			zIndex: this.isOwn() ? 1 : 0
 		};
 
-		return <div style={style} className="caret" />;
+		return <div style={style} className="caret-range"></div>
+	}
+
+	prepareRanges() {
+		return this.props.ranges.map((range, i) => this.prepareRange(range, i));
+	}
+
+	render() {
+		const style = {
+			zIndex: this.isOwn() ? 1 : 0
+		};
+
+		return (
+			<div style={style} className="caret">
+				{this.prepareRanges()}
+			</div>
+		);
 	}
 }

@@ -1,10 +1,12 @@
 ﻿import CaretCreationEventReducer from './caret-management-event-reducers/caret-creation-event-reducer';
 import CaretRemovalEventReducer from './caret-management-event-reducers/caret-removal-event-reducer';
+import SelectionEventReducer from './caret-management-event-reducers/selection-event-reducer';
 
 export default class CaretManagementEventReducer {
 	constructor() {
 		this.caretCreationEventReducer = new CaretCreationEventReducer();
 		this.caretRemovalEventReducer = new CaretRemovalEventReducer();
+		this.selectionEventReducer = new SelectionEventReducer();
 	}
 
 	reduce(document, event) {
@@ -19,6 +21,8 @@ export default class CaretManagementEventReducer {
 				return this.caretCreationEventReducer;
 			case 'remove-carets':
 				return this.caretRemovalEventReducer;
+			case 'select':
+				return this.selectionEventReducer;
 		}
 	}
 }

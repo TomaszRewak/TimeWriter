@@ -70,7 +70,8 @@ export default class InputPanel extends Component {
 		this.setState({
 			caretPreview:
 				[{
-					position: mousePosition
+					beginPosition: mousePosition,
+					endPosition: mousePosition
 				}]
 		});
 
