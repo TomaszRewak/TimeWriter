@@ -19,12 +19,6 @@ export default class SelectionEventReducer {
 		let beginPosition = caret.beginPosition;
 		let endPosition = this._textNavigationService.getCaretPosition(document.text, event.coordinates);
 
-		if (endPosition < beginPosition) {
-			const temp = beginPosition;
-			beginPosition = endPosition;
-			endPosition = temp;
-		}
-
 		return {
 			...caret,
 			beginPosition,

@@ -10,50 +10,53 @@
 	}
 
 	getColumn(text, position) {
-		let length = 0;
+		let column = 0;
 
 		for (let i = position; i > 0 && text[i - 1] != '\n'; i--)
-			length++;
+			column += this._getCharacterLength(text[i - 1]);
 
-		return length;
+		return column;
+	}
+
+	getLine(text, position) {
+		let line = 0;
+
+		for (let i = 0; i < position; i++)
+			if (text[i] == '\n')
+				line++;
+
+		return line;
 	}
 
 	getCaretCoordinates(text, position) {
 		position = this._clipPosition(position, text);
 
-		let coordinates = { line: 0, column: 0 }
-
-		for (let i = 0; i < position; i++)
-			coordinates = this._reduceCoordinates(coordinates, text[i]);
-
-		return coordinates;
+		return {
+			line: this.getLine(text, position),
+			column: this.getColumn(text, position)
+		}
 	}
 
 	getCaretPosition(text, coordinates) {
 		let position = 0;
 
-		let pointerCoordinates = { line: 0, column: 0 };
-		const targetCoordinates = this._clipCoordinates(coordinates, text);
+		for (let line = 0; line < coordinates.line && position < text.length; position++)
+			if (text[position] == '\n')
+				line++;
 
-		while (pointerCoordinates.line < targetCoordinates.line && position < text.length)
-			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
-
-		while (pointerCoordinates.column < targetCoordinates.column && position < text.length && text[position] !== '\n')
-			pointerCoordinates = this._reduceCoordinates(pointerCoordinates, text[position++]);
+		for (let column = 0; column < coordinates.column && position < text.length && text[position] != '\n'; position++)
+			column += this._getCharacterLength(text, position);
 
 		return position;
 	}
 
 	getEndOfLineColumn(text, position) {
-		let number = 0;
-
-		for (let i = position; i > 0 && text[i - 1] != '\n'; i--)
-			number += this._getCharacterLength(text[i - 1]);
+		let column = this.getColumn(text, position);
 
 		for (let i = position; i < text.length && text[i] != '\n'; i++)
-			number += this._getCharacterLength(text[i]);
+			column += this._getCharacterLength(text[i]);
 
-		return number;
+		return column;
 	}
 
 	getEndOfLinePosition(text, position) {
@@ -65,26 +68,6 @@
 
 	_clipPosition(position, text) {
 		return Math.max(0, Math.min(text.length, position));
-	}
-
-	_clipCoordinates(coordinates, text) {
-		return {
-			...coordinates,
-			line: this._clipLine(coordinates.line, text)
-		};
-	}
-
-	_clipLine(line, text) {
-		const linesNumber = this.countLines(text);
-
-		return Math.max(0, Math.min(linesNumber - 1, line));
-	}
-
-	_reduceCoordinates(coordinates, character) {
-		switch (character) {
-			case '\n': return { column: 0, line: coordinates.line + 1 };
-			default: return { column: coordinates.column + this._getCharacterLength(character), line: coordinates.line };
-		}
 	}
 
 	_getCharacterLength(character) {

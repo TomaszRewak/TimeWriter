@@ -1,31 +1,23 @@
 export default class DeletionEventPreProcessor {
 	prepareEvent(document, event, caret) {
-		const range = this._prepareRange(event, caret);
+		const rangeBegin = caret.beginPosition;
+		const rangeEnd = this._getRangeEnd(event, caret);
 
 		return {
 			...event,
-			beginPosition: this._clipPosition(document, range.beginPosition),
-			endPosition: this._clipPosition(document, range.endPosition),
+			beginPosition: this._clipPosition(document, Math.min(rangeBegin, rangeEnd)),
+			endPosition: this._clipPosition(document, Math.max(rangeBegin, rangeEnd)),
 			caret
 		}
 	}
 
-	_prepareRange(event, caret) {
+	_getRangeEnd(event, caret) {
 		if (caret.beginPosition != caret.endPosition)
-			return {
-				beginPosition: caret.beginPosition,
-				endPosition: caret.endPosition
-			}
+			return caret.endPosition;
 		if (event.mode == 'backward')
-			return {
-				beginPosition: caret.beginPosition - 1,
-				endPosition: caret.beginPosition
-			}
+			return caret.beginPosition - 1;
 		if (event.mode == 'forward')
-			return {
-				beginPosition: caret.beginPosition,
-				endPosition: caret.beginPosition + 1
-			}
+			return caret.beginPosition + 1;
 	}
 
 	_clipPosition(document, position) {

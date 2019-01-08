@@ -67,6 +67,7 @@
 .document .document-content .carets {
 	position: absolute;
 	width: 1ch;
+	pointer-events: none;
 }
 
 .document .document-content .carets .caret {
