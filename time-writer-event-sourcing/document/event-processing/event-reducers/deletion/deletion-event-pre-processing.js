@@ -1,12 +1,15 @@
 export default class DeletionEventPreProcessor {
 	prepareEvent(document, event, caret) {
-		const rangeBegin = caret.beginPosition;
-		const rangeEnd = this._getRangeEnd(event, caret);
+		const pointA = caret.beginPosition;
+		const pointB = this._getRangeEnd(event, caret);
+
+		const begin = Math.min(pointA, pointB);
+		const end = Math.max(pointA, pointB);
 
 		return {
 			...event,
-			beginPosition: this._clipPosition(document, Math.min(rangeBegin, rangeEnd)),
-			endPosition: this._clipPosition(document, Math.max(rangeBegin, rangeEnd)),
+			beginPosition: this._clipPosition(document, begin),
+			endPosition: this._clipPosition(document, end),
 			caret
 		}
 	}

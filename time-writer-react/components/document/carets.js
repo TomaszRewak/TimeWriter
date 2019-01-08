@@ -12,17 +12,20 @@ export default class Carets extends Component {
 	_getCaretRanges(caret) {
 		const ranges = [];
 
-		const beginCoordinates = this.textNavigationService.getCaretCoordinates(this.props.text, caret.beginPosition);
-		const endCoordinates = this.textNavigationService.getCaretCoordinates(this.props.text, caret.endPosition);
+		const beginPosition = Math.min(caret.beginPosition, caret.endPosition);
+		const endPosition = Math.max(caret.beginPosition, caret.endPosition);
+
+		const beginCoordinates = this.textNavigationService.getCaretCoordinates(this.props.text, beginPosition);
+		const endCoordinates = this.textNavigationService.getCaretCoordinates(this.props.text, endPosition);
 
 		let { line, column } = beginCoordinates;
 
-		let position = caret.beginPosition;
-		while (position <= caret.endPosition) {
+		let position = beginPosition;
+		while (position <= endPosition) {
 			const endOfLinePosition = this.textNavigationService.getEndOfLinePosition(this.props.text, position);
 			const endOfLineColumn = this.textNavigationService.getEndOfLineColumn(this.props.text, position);
 
-			if (endOfLinePosition < caret.endPosition)
+			if (endOfLinePosition < endPosition)
 				ranges.push({ line, column, length: endOfLineColumn - column });
 			else
 				ranges.push({ line, column, length: endCoordinates.column - column });

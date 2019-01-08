@@ -9,11 +9,14 @@ export default class InsertionEventPreProcessor
 
 	prepareEvent(document, event, caret)
 	{
+		const begin = Math.min(caret.beginPosition, caret.endPosition);
+		const end = Math.max(caret.beginPosition, caret.endPosition);
+
 		return {
 			...event,
 			text: this._prepareEventText(document, event, caret),
-			beginPosition: caret.beginPosition,
-			endPosition: caret.endPosition
+			beginPosition: begin,
+			endPosition: end
 		}
 	}
 
