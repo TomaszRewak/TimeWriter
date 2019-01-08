@@ -30,7 +30,7 @@ export default class Caret extends Component {
 			zIndex: this.isOwn() ? 1 : 0
 		};
 
-		return <div style={style} className="caret-range"></div>
+		return <div key={i} style={style} className="caret-range"></div>
 	}
 
 	prepareRanges() {

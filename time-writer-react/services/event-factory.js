@@ -9,8 +9,12 @@ export default class EventFactory {
 			return [this.prepareUndoEvent()];
 		if (key === 89 && e.ctrlKey)
 			return [this.prepareRedoEvent()];
+		if (key === 37 && e.ctrlKey)
+			return [this.prepareMoveLeftFastEvent()];
 		if (key === 37)
 			return [this.prepareMoveLeftEvent()];
+		if (key === 39 && e.ctrlKey)
+			return [this.prepareMoveRightFastEvent()];
 		if (key === 39)
 			return [this.prepareMoveRightEvent()];
 		if (key === 38)
@@ -50,19 +54,27 @@ export default class EventFactory {
 	}
 
 	prepareMoveLeftEvent() {
-		return { type: 'navigate', mode: 'move-horizontally', offset: -1 };
+		return { type: 'navigate', mode: 'move-horizontally', direction: 'left' };
+	}
+
+	prepareMoveLeftFastEvent() {
+		return { type: 'navigate', mode: 'move-horizontally', direction: 'left', fast: true };
 	}
 
 	prepareMoveRightEvent() {
-		return { type: 'navigate', mode: 'move-horizontally', offset: +1 };
+		return { type: 'navigate', mode: 'move-horizontally', direction: 'right' };
+	}
+
+	prepareMoveRightFastEvent() {
+		return { type: 'navigate', mode: 'move-horizontally', direction: 'right', fast: true };
 	}
 
 	prepareMoveUpEvent() {
-		return { type: 'navigate', mode: 'move-vertically', offset: -1 };
+		return { type: 'navigate', mode: 'move-vertically', direction: 'up' };
 	}
 
 	prepareMoveDownEvent() {
-		return { type: 'navigate', mode: 'move-vertically', offset: +1 };
+		return { type: 'navigate', mode: 'move-vertically', direction: 'down' };
 	}
 
 	prepareBackwardDeleteEvent() {

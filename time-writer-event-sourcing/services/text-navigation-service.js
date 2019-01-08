@@ -29,7 +29,7 @@
 	}
 
 	getCaretCoordinates(text, position) {
-		position = this._clipPosition(position, text);
+		position = this.clipPosition(position, text);
 
 		return {
 			line: this.getLine(text, position),
@@ -45,7 +45,7 @@
 				line++;
 
 		for (let column = 0; column < coordinates.column && position < text.length && text[position] != '\n'; position++)
-			column += this._getCharacterLength(text, position);
+			column += this._getCharacterLength(text[position]);
 
 		return position;
 	}
@@ -66,7 +66,31 @@
 		return position;
 	}
 
-	_clipPosition(position, text) {
+	getNextFastPosition(text, position) {
+		if (position == text.length)
+			return position;
+
+		const template = this._getCharacterTemplate(text[position]);
+
+		while (position < text.length && template.test(text[position]))
+			position++;
+
+		return position;
+	}
+
+	getPreviousFastPosition(text, position) {
+		if (position == 0)
+			return position;
+
+		const template = this._getCharacterTemplate(text[position - 1]);
+
+		while (position > 0 && template.test(text[position - 1]))
+			position--;
+
+		return position;
+	}
+
+	clipPosition(position, text) {
 		return Math.max(0, Math.min(text.length, position));
 	}
 
@@ -75,5 +99,29 @@
 			case '\t': return 4
 			default: return 1;
 		}
+	}
+
+	_getCharacterTemplate(character) {
+		const templates = [
+			/[\t ]/,
+			/[\w]/,
+			/[^\w\t ]/
+		]
+
+		for (const template of templates)
+			if (template.test(character))
+				return template
+	}
+
+	_isWhiteSpace(character) {
+		return /[\n\t ]/.test(character);
+	}
+
+	_isLetter(character) {
+		return /[\w]/.test(character);
+	}
+
+	_isSpecialCharacter(character) {
+		return !this._isLetter(character) && !this._isWhiteSpace(character);
 	}
 }
