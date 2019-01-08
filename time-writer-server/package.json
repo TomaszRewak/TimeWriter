@@ -4,8 +4,8 @@
   "description": "TimeWriter.Server",
   "main": "server.js",
   "scripts": {
-    "build dev": "webpack --mode development",
-    "build prod": "webpack --mode production",
+    "build-dev": "webpack --mode development",
+    "build-prod": "webpack --mode production",
     "watch": "webpack --w --mode development",
     "run-and-watch": "nodemon app.js"
   },

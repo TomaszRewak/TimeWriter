@@ -12,7 +12,6 @@ export default class InputPanel extends Component {
 
 		this.state = {
 			selectionInProgress: false,
-			caretPreview: []
 		};
 
 		this.caretsPreview = React.createRef()
@@ -65,16 +64,6 @@ export default class InputPanel extends Component {
 	}
 
 	mouseMove(e) {
-		const mousePosition = this._getMousePosition(e);
-
-		this.setState({
-			caretPreview:
-				[{
-					beginPosition: mousePosition,
-					endPosition: mousePosition
-				}]
-		});
-
 		if (!this.state.selectionInProgress)
 			return;
 	}
@@ -91,7 +80,6 @@ export default class InputPanel extends Component {
 	render() {
 		return (
 			<div className="input-panel">
-				<Carets ref={this.caretsPreview} carets={this.state.caretPreview} text={this.props.text} />
 				<div
 					className="input-interceptor" tabIndex="0"
 					onKeyDown={this.keyDown}
