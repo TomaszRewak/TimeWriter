@@ -2,6 +2,7 @@ import EventReducer from "../event-processing/event-reducer";
 import EventStoreRepair from "./event-store-repair";
 import EventStoreState from "./event-store-state";
 import EventStoreCleanup from "./event-store-cleanup";
+import EventStoreValidation from "./event-store-validation";
 
 export default class EventStore {
 	constructor(history) {
@@ -11,6 +12,7 @@ export default class EventStore {
 		this._eventStoreRepair = new EventStoreRepair();
 		this._eventStoreState = new EventStoreState();
 		this._eventStoreCleanup = new EventStoreCleanup();
+		this._eventStoreValidation = new EventStoreValidation();
 	}
 
 	_reduceChain(event) {
@@ -30,6 +32,7 @@ export default class EventStore {
 			this._eventStoreRepair.fix(newChain);
 			this._eventStoreState.updateCurrentState(newChain);
 			this._eventStoreCleanup.cleanup(newChain);
+			this._eventStoreValidation.validate(newChain);
 		}
 		catch(e) {
 			console.dir(e);
