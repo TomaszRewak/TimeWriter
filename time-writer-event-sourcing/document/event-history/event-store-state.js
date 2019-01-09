@@ -5,35 +5,57 @@ export default class EventStoreState {
 		this._eventReducer = new EventReducer();
 	}
 
-	_reduceHistoryOffset(offset, event) {
-		if (event.type === 'undo')
-			return offset + 1;
-		if (event.type === 'redo')
-			return offset - 1;
-
-		return offset - 1;
+	updateCurrentState(chain) {
+		chain[0].state = this._getState(chain, 0);
 	}
 
-	_isHistoryEvent(event) {
-		return event.type == 'undo' || event.type === 'redo';
-	}
+	_getState(chain, index) {
+		let undoLevels = new Map();
+		let events = [];
 
-	_getPreviousStateIndex(chain, index) {
-		if (!this._isHistoryEvent(chain[index].event))
-			return index + 1;
+		while (undoLevels.size || !chain[index].state) {
+			const event = chain[index].event;
 
-		let historyOffset = 0;
+			if (!this._isHistoryEvent(event) && !this._shouldUndo(undoLevels, event))
+				events.push(event);
 
-		do {
-			historyOffset = this._reduceHistoryOffset(historyOffset, chain[index].event);
+			this._updateUndoLevel(undoLevels, event);
+
 			index++;
 		}
-		while (historyOffset > 0 || this._isHistoryEvent(chain[index].event));
 
-		if (historyOffset !== 0)
-			throw new Error();
+		return events.reduceRight((state, event) => this._reduceState(state, event), chain[index].state)
+	}
 
-		return index;
+	_updateUndoLevel(undoLevels, event) {
+		const key = this._getKey(event.author);
+
+		if (!undoLevels.has(key))
+			undoLevels.set(key, 0);
+
+		let level = undoLevels.get(key);
+
+		if (event.type === 'redo')
+			level--;
+		else if (event.type === 'undo')
+			level++;
+		else if (level > 0)
+			level--;
+
+		if (level === 0)
+			undoLevels.delete(key);
+		else
+			undoLevels.set(key, level);
+	}
+
+	_shouldUndo(undoLevels, event) {
+		const key = this._getKey(event.author);
+
+		return undoLevels.has(key);
+	}
+
+	_getKey(user) {
+		return user ? user : null;
 	}
 
 	_reduceState(state, event) {
@@ -43,17 +65,7 @@ export default class EventStoreState {
 			return this._eventReducer.reduce(state, event);
 	}
 
-	_getState(chain, index) {
-		if (chain[index].state)
-			return chain[index].state;
-
-		const previousStateIndex = this._getPreviousStateIndex(chain, index);
-		const previousState = this._getState(chain, previousStateIndex);
-
-		return this._reduceState(previousState, chain[index].event);
-	}
-
-	updateCurrentState(chain) {
-		chain[0].state = this._getState(chain, 0);
+	_isHistoryEvent(event) {
+		return event.type == 'undo' || event.type === 'redo';
 	}
 }
