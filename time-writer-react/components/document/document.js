@@ -7,7 +7,7 @@ import Lines from './lines';
 import LineNumbers from './line-numbers';
 import { TextDocument } from '../../external/event-sourcing';
 import SocketIO from 'socket.io-client';
-import Logs from '../logs/logs';
+import Logs from '../logging/logs';
 import InputPanel from './input-panel';
 import EventFactory from '../../services/event-factory';
 
@@ -19,7 +19,7 @@ class Document extends Component {
 
 		this.state = {
 			document: null,
-			logs: []
+			history: []
 		}
 
 		this.sendEvent = this.sendEvent.bind(this);
@@ -36,7 +36,7 @@ class Document extends Component {
 
 		this._textDocument = new TextDocument(currentState);
 
-		this.setState({ document: this._textDocument.state })
+		this.setState({ document: this._textDocument.state, history: this._textDocument.history });
 
 		this._socket = SocketIO(`${serverUrl}?document=${documentId}`);
 		this._socket.on('document change', event => {
@@ -68,7 +68,7 @@ class Document extends Component {
 
 		this.setState({
 			document: this._textDocument.state,
-			logs: this._textDocument.history.slice(0, 5).map(n => n.event)
+			history: this._textDocument.history
 		});
 	}
 
@@ -88,7 +88,7 @@ class Document extends Component {
 						</div>
 					</div>
 				</div>
-				<Logs logs={this.state.logs} />
+				<Logs history={this.state.history} />
 			</div>
 		);
 	}

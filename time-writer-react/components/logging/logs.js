@@ -24,13 +24,15 @@ export default class Logs extends Component {
 	}
 
 	renderVisible() {
+		const logs = this.props.history.slice(0, 5).map(n => n.event);
+
 		return (
 			<div className="logs">
 				<a onClick={this.hideLogs}>Hide logs</a>
 				<div className="info">Displaying logs may slow down the editor.</div>
 				<div className="info">Even tho it's slow either way :D</div>
 				{
-					this.props.logs.map((event, key) => <Log key={key} value={event} />)
+					logs.map((event, key) => <Log key={key} value={event} />)
 				}
 			</div>
 		);
