@@ -9,13 +9,33 @@
 		return counter;
 	}
 
+	getLineBegin(text, position) {
+		while (position > 0 && text[position - 1] != '\n')
+			position--;
+
+		return position;
+	}
+
+	getLineEnd(text, position) {
+		while (position < text.length && text[position] != '\n')
+			position++;
+
+		return position;
+	}
+
+	getFragmentWidth(text, begin, end, startColumn) {
+		let column = startColumn;
+
+		for (let index = begin; index < end; index++)
+			column += this._getCharacterWidth(text[index], column);
+
+		return column - startColumn;
+	}
+
 	getColumn(text, position) {
-		let column = 0;
+		let lineBegin = this.getLineBegin(text, position);
 
-		for (let i = position; i > 0 && text[i - 1] != '\n'; i--)
-			column += this._getCharacterLength(text[i - 1]);
-
-		return column;
+		return this.getFragmentWidth(text, lineBegin, position, 0);
 	}
 
 	getLine(text, position) {
@@ -45,18 +65,16 @@
 				line++;
 
 		for (let column = 0; column < coordinates.column && position < text.length && text[position] != '\n'; position++)
-			column += this._getCharacterLength(text[position]);
+			column += this._getCharacterWidth(text[position], column);
 
 		return position;
 	}
 
 	getEndOfLineColumn(text, position) {
-		let column = this.getColumn(text, position);
+		let lineBegin = this.getLineBegin(text, position);
+		let lineEnd = this.getLineEnd(text, position);
 
-		for (let i = position; i < text.length && text[i] != '\n'; i++)
-			column += this._getCharacterLength(text[i]);
-
-		return column;
+		return this.getFragmentWidth(text, lineBegin, lineEnd, 0);
 	}
 
 	getEndOfLinePosition(text, position) {
@@ -94,9 +112,9 @@
 		return Math.max(0, Math.min(text.length, position));
 	}
 
-	_getCharacterLength(character) {
+	_getCharacterWidth(character, column) {
 		switch (character) {
-			case '\t': return 4
+			case '\t': return Math.ceil((column + 1) / 4) * 4 - column;
 			default: return 1;
 		}
 	}

@@ -1,3 +1,5 @@
+import TextNavigationService from "../../../../time-writer-event-sourcing/services/text-navigation-service";
+
 const patternRules = [
 	{
 		pattern: /\/\/.*/,
@@ -44,14 +46,69 @@ const strictRules = [
 ];
 
 export default class TextFormattingHelper {
-	static applyDefaultRule(text) {
+	constructor() {
+		this._textNavigationService = new TextNavigationService();
+	}
+
+	applyFormattingRules(text) {
 		if (!text)
 			return [];
 
-		return [{ text: text, type: 'plain' }];
+		var matches = this._applyPatternRules(text, 0, text.length);
+
+		matches.reduce((column, match) => {
+			match.width = this._textNavigationService.getFragmentWidth(match.text, 0, match.text.length, column);
+			return column + match.width;
+		}, 0);
+
+		return matches;
 	}
 
-	static applyStrictRules(text) {
+	_applyPatternRules(text, start, end) {
+		const fragment = text.substring(start, end);
+
+		for (const rule of patternRules) {
+			const match = rule.pattern.exec(fragment);
+
+			if (!match)
+				continue;
+
+			const matchStart = start + match[0].index;
+			const matchEnd = matchStart + match[0].length;
+
+			return [
+				this._applyPatternRules(text, start, matchStart),
+				{ text: fragment, type: rule.type },
+				this._applyPatternRules(text, matchEnd, end)
+			].flat();
+		}
+
+		return this._applyLooseRules(text);
+	}
+
+	_applyLooseRules(text, start, end) {
+		const fragment = text.substring(start, end);
+
+		for (const rule of looseRules) {
+			for (const pattern of rule.patterns) {
+				if (!fragment.includes(pattern))
+					continue;
+
+				const [head, ...tail] = fragment
+					.split(pattern)
+					.map(textBetween => this._applyLooseRules(textBetween));
+
+				return [
+					head,
+					...tail.map(elementsBetween => [{ text: pattern, type: rule.type }, ...elementsBetween])
+				].flat();
+			}
+		}
+
+		return this._applyStrictRules(text);
+	}
+
+	_applyStrictRules(text) {
 		for (const rule of strictRules) {
 			for (const pattern of rule.patterns) {
 				if (text !== pattern)
@@ -61,54 +118,13 @@ export default class TextFormattingHelper {
 			}
 		}
 
-		return TextFormattingHelper.applyDefaultRule(text);
+		return this._applyDefaultRule(text);
 	}
 
-	static applyLooseRules(text) {
-		for (const rule of looseRules) {
-			for (const pattern of rule.patterns) {
-				if (!text.includes(pattern))
-					continue;
-
-				const [head, ...tail] = text
-					.split(pattern)
-					.map(fragment => TextFormattingHelper.applyLooseRules(fragment));
-
-				return [
-					head,
-					...tail.map(fragment => [{ text: pattern, type: rule.type }, ...fragment])
-				].flat();
-			}
-		}
-
-		return TextFormattingHelper.applyStrictRules(text);
-	}
-
-	static applyPatternRules(text) {
-		for (const rule of patternRules) {
-			const match = rule.pattern.exec(text);
-
-			if (!match)
-				continue;
-
-			const matchText = match[0];
-			const startIndex = match.index;
-			const endIndex = startIndex + matchText.length;
-
-			return [
-				TextFormattingHelper.applyPatternRules(text.substring(0, startIndex)),
-				{ text: matchText, type: rule.type },
-				TextFormattingHelper.applyPatternRules(text.substring(endIndex, text.length))
-			].flat();
-		}
-
-		return TextFormattingHelper.applyLooseRules(text);
-	}
-
-	static applyFormattingRules(text) {
+	_applyDefaultRule(text) {
 		if (!text)
 			return [];
 
-		return this.applyPatternRules(text);
+		return [{ text: text, type: 'plain' }];
 	}
 }

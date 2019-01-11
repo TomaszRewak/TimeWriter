@@ -25,7 +25,7 @@ export default class Logs extends Component {
 
 	renderVisible() {
 		const logs = this.props.history.slice(0, 5).map(n => n.event);
-
+		
 		return (
 			<div className="logs">
 				<a onClick={this.hideLogs}>Hide logs</a>
