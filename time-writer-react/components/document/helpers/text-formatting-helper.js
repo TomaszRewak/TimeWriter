@@ -40,7 +40,7 @@ const strictRules = [
 		type: 'statement'
 	},
 	{
-		patterns: ['bool', 'void', 'int', 'double', 'float', 'var', 'const', 'let', 'auto'],
+		patterns: ['bool', 'void', 'int', 'char', 'double', 'float', 'var', 'const', 'let', 'auto'],
 		type: 'type'
 	}
 ];
@@ -54,7 +54,7 @@ export default class TextFormattingHelper {
 		if (!text)
 			return [];
 
-		var matches = this._applyPatternRules(text, 0, text.length);
+		var matches = this._applyPatternRules(text);
 
 		matches.reduce((column, match) => {
 			match.width = this._textNavigationService.getFragmentWidth(match.text, 0, match.text.length, column);
@@ -64,37 +64,34 @@ export default class TextFormattingHelper {
 		return matches;
 	}
 
-	_applyPatternRules(text, start, end) {
-		const fragment = text.substring(start, end);
-
+	_applyPatternRules(text) {
 		for (const rule of patternRules) {
-			const match = rule.pattern.exec(fragment);
+			const match = rule.pattern.exec(text);
 
 			if (!match)
 				continue;
 
-			const matchStart = start + match[0].index;
-			const matchEnd = matchStart + match[0].length;
+			const matchText = match[0];
+			const startIndex = match.index;
+			const endIndex = startIndex + matchText.length;
 
 			return [
-				this._applyPatternRules(text, start, matchStart),
-				{ text: fragment, type: rule.type },
-				this._applyPatternRules(text, matchEnd, end)
+				this._applyPatternRules(text.substring(0, startIndex)),
+				{ text: matchText, type: rule.type },
+				this._applyPatternRules(text.substring(endIndex, text.length))
 			].flat();
 		}
 
 		return this._applyLooseRules(text);
 	}
 
-	_applyLooseRules(text, start, end) {
-		const fragment = text.substring(start, end);
-
+	_applyLooseRules(text) {
 		for (const rule of looseRules) {
 			for (const pattern of rule.patterns) {
-				if (!fragment.includes(pattern))
+				if (!text.includes(pattern))
 					continue;
 
-				const [head, ...tail] = fragment
+				const [head, ...tail] = text
 					.split(pattern)
 					.map(textBetween => this._applyLooseRules(textBetween));
 

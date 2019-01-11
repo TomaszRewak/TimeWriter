@@ -10,15 +10,10 @@ export default class InputPanel extends Component {
 		this._textNavigationService = new TextNavigationService();
 		this._eventFactory = new EventFactory();
 
-		this.state = {
-			selectionInProgress: false,
-		};
-
 		this.caretsPreview = React.createRef()
 
 		this.keyDown = this.keyDown.bind(this);
 		this.mouseDown = this.mouseDown.bind(this);
-		this.mouseMove = this.mouseMove.bind(this);
 		this.mouseUp = this.mouseUp.bind(this);
 		this.paste = this.paste.bind(this);
 	}
@@ -59,17 +54,9 @@ export default class InputPanel extends Component {
 
 		for (const event of events)
 			this.props.onNewEvent(event);
-
-		this.setState({ selectionInProgress: true });
-	}
-
-	mouseMove(e) {
-		if (!this.state.selectionInProgress)
-			return;
 	}
 
 	mouseUp(e) {
-		this.setState({ selectionInProgress: false });
 	}
 
 	paste(e) {
@@ -85,7 +72,6 @@ export default class InputPanel extends Component {
 					onKeyDown={this.keyDown}
 					onMouseDown={this.mouseDown}
 					onMouseUp={this.mouseUp}
-					onMouseMove={this.mouseMove}
 					onPaste={this.paste}>
 				</div>
 				<div className="character-template" ref={this.caretsPreview} />

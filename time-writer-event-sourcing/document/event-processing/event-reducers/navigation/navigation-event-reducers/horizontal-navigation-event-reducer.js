@@ -23,7 +23,7 @@ export default class HorizontalNavigationEventReducer {
 
 		return {
 			...caret,
-			beginPosition: newPosition,
+			beginPosition: event.select ? caret.beginPosition : newPosition,
 			endPosition: newPosition,
 			lastOperation: 'navigation horizontal'
 		};

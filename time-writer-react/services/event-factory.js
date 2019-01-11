@@ -9,18 +9,14 @@ export default class EventFactory {
 			return [this.prepareUndoEvent()];
 		if (key === 89 && e.ctrlKey)
 			return [this.prepareRedoEvent()];
-		if (key === 37 && e.ctrlKey)
-			return [this.prepareMoveLeftFastEvent()];
 		if (key === 37)
-			return [this.prepareMoveLeftEvent()];
-		if (key === 39 && e.ctrlKey)
-			return [this.prepareMoveRightFastEvent()];
+			return [this.prepareMoveLeftEvent(e.ctrlKey, e.shiftKey)];
 		if (key === 39)
-			return [this.prepareMoveRightEvent()];
+			return [this.prepareMoveRightEvent(e.ctrlKey, e.shiftKey)];
 		if (key === 38)
-			return [this.prepareMoveUpEvent()];
+			return [this.prepareMoveUpEvent(e.shiftKey)];
 		if (key === 40)
-			return [this.prepareMoveDownEvent()];
+			return [this.prepareMoveDownEvent(e.shiftKey)];
 		if (key === 8)
 			return [this.prepareBackwardDeleteEvent()];
 		if (key === 46)
@@ -53,28 +49,20 @@ export default class EventFactory {
 		return { type: 'redo' };
 	}
 
-	prepareMoveLeftEvent() {
-		return { type: 'navigate', mode: 'move-horizontally', direction: 'left' };
+	prepareMoveLeftEvent(fast, select) {
+		return { type: 'navigate', mode: 'move-horizontally', direction: 'left', fast: !!fast, select: !!select };
 	}
 
-	prepareMoveLeftFastEvent() {
-		return { type: 'navigate', mode: 'move-horizontally', direction: 'left', fast: true };
+	prepareMoveRightEvent(fast, select) {
+		return { type: 'navigate', mode: 'move-horizontally', direction: 'right', fast: !!fast, select: !!select };
 	}
 
-	prepareMoveRightEvent() {
-		return { type: 'navigate', mode: 'move-horizontally', direction: 'right' };
+	prepareMoveUpEvent(select) {
+		return { type: 'navigate', mode: 'move-vertically', direction: 'up', select: !!select };
 	}
 
-	prepareMoveRightFastEvent() {
-		return { type: 'navigate', mode: 'move-horizontally', direction: 'right', fast: true };
-	}
-
-	prepareMoveUpEvent() {
-		return { type: 'navigate', mode: 'move-vertically', direction: 'up' };
-	}
-
-	prepareMoveDownEvent() {
-		return { type: 'navigate', mode: 'move-vertically', direction: 'down' };
+	prepareMoveDownEvent(select) {
+		return { type: 'navigate', mode: 'move-vertically', direction: 'down', select: !!select };
 	}
 
 	prepareBackwardDeleteEvent() {
