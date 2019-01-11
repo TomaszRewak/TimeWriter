@@ -4,9 +4,6 @@
 	}
 
 	_reduceCaret(caret, event) {
-		if (caret.endPosition < event.beginPosition)
-			return caret;
-
 		return {
 			...caret,
 			beginPosition: this._reducePosition(caret.beginPosition, event),
