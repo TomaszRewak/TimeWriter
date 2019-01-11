@@ -4,6 +4,8 @@ export default class Data extends Component {
 	renderValue() {
 		if (typeof this.props.value === 'string' || this.props.value instanceof String)
 			return <div className="value string">{`"${this.props.value}"`}</div>
+		if (typeof this.props.value === typeof true)
+			return <div className="value number">{`${this.props.value ? 'true' : 'false'}`}</div>
 		else
 			return <div className="value number">{this.props.value}</div>
 

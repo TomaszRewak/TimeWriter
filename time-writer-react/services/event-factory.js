@@ -18,9 +18,9 @@ export default class EventFactory {
 		if (key === 40)
 			return [this.prepareMoveDownEvent(e.shiftKey)];
 		if (key === 8)
-			return [this.prepareBackwardDeleteEvent()];
+			return [this.prepareBackwardDeleteEvent(e.ctrlKey)];
 		if (key === 46)
-			return [this.prepareForwardDeleteEvent()];
+			return [this.prepareForwardDeleteEvent(e.ctrlKey)];
 		if (key === 13)
 			return [this.prepareInsertEvent('\n')];
 		if (key === 9)
@@ -65,12 +65,12 @@ export default class EventFactory {
 		return { type: 'navigate', mode: 'move-vertically', direction: 'down', select: !!select };
 	}
 
-	prepareBackwardDeleteEvent() {
-		return { type: 'delete', mode: 'backward' };
+	prepareBackwardDeleteEvent(fast) {
+		return { type: 'delete', mode: 'backward', fast: !!fast };
 	}
 
-	prepareForwardDeleteEvent() {
-		return { type: 'delete', mode: 'forward' };
+	prepareForwardDeleteEvent(fast) {
+		return { type: 'delete', mode: 'forward', fast: !!fast };
 	}
 
 	prepareInsertEvent(text) {
