@@ -118,7 +118,3 @@
 	opacity: 0;
 	pointer-events: none;
 }
-
-.document>.document-content>.input-panel>.carets {
-	opacity: 0.25;
-}

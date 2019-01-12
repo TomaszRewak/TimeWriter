@@ -117,7 +117,7 @@ export default class InputPanel extends Component {
 					onCut={this.cut}>
 				</div>
 				<div className="character-template" ref={this.caretsPreview}>0</div>
-				<Carets text={this.props.text} carets={this.preparePreviewCarets()} />
+				<Carets text={this.props.text} carets={this.preparePreviewCarets()} style={{ opacity: this.state.mouseIn ? 0.25 : 0.08 }} />
 			</div>
 		);
 	}

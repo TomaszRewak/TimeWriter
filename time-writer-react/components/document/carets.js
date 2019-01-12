@@ -55,7 +55,7 @@ export default class Carets extends Component {
 		const carets = this._prepareCarets();
 
 		return (
-			<div className="carets">
+			<div className="carets" style={this.props.style}>
 				{carets}
 			</div>
 		);
