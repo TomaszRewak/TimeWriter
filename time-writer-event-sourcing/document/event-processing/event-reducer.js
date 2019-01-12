@@ -2,6 +2,7 @@
 import InsertionEventReducer from "./event-reducers/insertion/insertion-event-reducer";
 import DeletionEventReducer from "./event-reducers/deletion/deletion-event-reducer";
 import CaretManagementEventReducer from "./event-reducers/caret-management/caret-management-event-reducer";
+import PostprocessingReducer from "./event-reducers/postprocessing/postprocessing-redocer";
 
 export default class EventReducer {
 	constructor() {
@@ -9,6 +10,8 @@ export default class EventReducer {
 		this.deletionEventReducer = new DeletionEventReducer();
 		this.navigationEventReducer = new NavigationEventReducer();
 		this.caretManagementEventReducer = new CaretManagementEventReducer();
+		
+		this.postprocessingReducer = new PostprocessingReducer();
 	}
 
 	_getReducer(event) {
@@ -29,6 +32,6 @@ export default class EventReducer {
 	reduce(document, event) {
 		const reducer = this._getReducer(event);
 
-		return reducer.reduce(document, event);
+		return this.postprocessingReducer.reduce(reducer.reduce(document, event));
 	}
 }
