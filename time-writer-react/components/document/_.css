@@ -4,6 +4,10 @@
 	margin: 0;
 	font-family: 'Nunito', sans-serif;
 	overflow: hidden;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .loading-screen {
@@ -19,6 +23,7 @@
 	flex: 1;
 	display: flex;
 	flex-direction: row;
+	min-height: 0px;
 }
 
 .document-scroll {
@@ -43,7 +48,6 @@
 	text-align: right;
 	padding: 5px;
 	pointer-events: none;
-	user-select: none;
 }
 
 .document .document-content {
@@ -54,9 +58,8 @@
 
 .document .document-content .lines {
 	pointer-events: none;
-	user-select: none;
-	position: absolute;
 	min-width: 100%;
+	padding-right: 30px;
 }
 
 .document .document-content .lines .line {

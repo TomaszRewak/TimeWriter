@@ -23,6 +23,9 @@ export default class InputPanel extends Component {
 	keyDown(e) {
 		const events = this._eventFactory.prepareKeyDownEvents(e);
 
+		if (events.length > 0)
+			e.preventDefault();
+
 		for (const event of events)
 			this.props.onNewEvent(event);
 	}
@@ -35,6 +38,8 @@ export default class InputPanel extends Component {
 			this.props.onNewEvent(event);
 
 		this.setState({ mouseDownPosition: mousePosition });
+		
+		//e.preventDefault();
 	}
 
 	mouseUp(e) {
@@ -45,6 +50,8 @@ export default class InputPanel extends Component {
 
 		const event = this._eventFactory.prepareSelectEvent(mousePosition);
 		this.props.onNewEvent(event);
+		
+		e.preventDefault();
 	}
 
 	paste(e) {
@@ -84,7 +91,7 @@ export default class InputPanel extends Component {
 		const selectedText = this.props
 			.carets
 			.map(caret => this.props.text.substring(Math.min(caret.beginPosition, caret.endPosition), Math.max(caret.beginPosition, caret.endPosition)))
-			.join();
+			.join('');
 
 		e.clipboardData.setData('text/plain', selectedText);
 		e.preventDefault();

@@ -76,10 +76,10 @@ export default class TextFormattingHelper {
 			const endIndex = startIndex + matchText.length;
 
 			return [
-				this._applyPatternRules(text.substring(0, startIndex)),
+				...this._applyPatternRules(text.substring(0, startIndex)),
 				{ text: matchText, type: rule.type },
-				this._applyPatternRules(text.substring(endIndex, text.length))
-			].flat();
+				...this._applyPatternRules(text.substring(endIndex, text.length))
+			];
 		}
 
 		return this._applyLooseRules(text);
@@ -95,10 +95,7 @@ export default class TextFormattingHelper {
 					.split(pattern)
 					.map(textBetween => this._applyLooseRules(textBetween));
 
-				return [
-					head,
-					...tail.map(elementsBetween => [{ text: pattern, type: rule.type }, ...elementsBetween])
-				].flat();
+				return tail.reduce((a, e) => [...a, { text: pattern, type: rule.type }, ...e], head);
 			}
 		}
 

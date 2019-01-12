@@ -17,10 +17,14 @@ export default class EventFactory {
 			return [this.prepareMoveLeftEvent(e.ctrlKey, e.shiftKey)];
 		if (key === 39)
 			return [this.prepareMoveRightEvent(e.ctrlKey, e.shiftKey)];
+		if (key === 38 && e.ctrlKey)
+			return [];
 		if (key === 38 && e.altKey && e.shiftKey)
 			return [this.prepareAddCaretAboveEvent()];
 		if (key === 38)
 			return [this.prepareMoveUpEvent(e.shiftKey)];
+		if (key === 40 && e.ctrlKey)
+			return [];
 		if (key === 40 && e.altKey && e.shiftKey)
 			return [this.prepareAddCaretBelowEvent()];
 		if (key === 40)

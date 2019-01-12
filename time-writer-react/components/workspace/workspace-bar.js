@@ -26,8 +26,8 @@ export default class WorkspaceBar extends Component {
 					<div className="me">
 						ⓘ
 						<div className="me-popup">
+							<p>By Tomasz Rewak</p>
 							<img src="me.png" title="ale fruwa" />
-							<span>By Tomasz Rewak</span>
 						</div>
 					</div>
 				</div>

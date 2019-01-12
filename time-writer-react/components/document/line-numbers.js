@@ -15,7 +15,7 @@ export default class LineNumbers extends Component {
 			.map(number => <div key={number} className="line-number">{number}</div>);
 
 		return (
-			<div className="line-numbers">
+			<div className="line-numbers" style={{height: `${1.2 * lineNumber}em`}}>
 				{numbers}
 			</div>
 		);
