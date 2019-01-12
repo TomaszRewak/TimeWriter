@@ -54,9 +54,18 @@ export default class InputPanel extends Component {
 
 		for (const event of events)
 			this.props.onNewEvent(event);
+
+		this.setState({ mouseDownPosition: mousePosition });
 	}
 
 	mouseUp(e) {
+		const mousePosition = this._getMousePosition(e);
+
+		if (mousePosition === this.state.mouseDownPosition)
+			return;
+
+		const event = this._eventFactory.prepareSelectEvent(mousePosition);
+		this.props.onNewEvent(event);
 	}
 
 	paste(e) {
