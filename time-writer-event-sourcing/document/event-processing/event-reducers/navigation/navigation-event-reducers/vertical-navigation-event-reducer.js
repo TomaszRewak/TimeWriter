@@ -31,7 +31,7 @@ export default class VerticalNavigationEventReducer {
 			beginPosition: event.select ? caret.beginPosition : newCaretPosition,
 			endPosition: newCaretPosition,
 			lastOperation: 'navigation vertical',
-			verticalNavigationColumn: newCaretCoordinates.column
+			endColumn: newCaretCoordinates.column
 		};
 	}
 
@@ -39,7 +39,7 @@ export default class VerticalNavigationEventReducer {
 		let column =
 			caret.lastOperation !== 'navigation vertical'
 				? coordinates.column
-				: caret.verticalNavigationColumn;
+				: caret.endColumn;
 
 		return {
 			column: column,

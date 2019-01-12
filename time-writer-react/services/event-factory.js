@@ -5,6 +5,8 @@ export default class EventFactory {
 
 		if (key === 86 && e.ctrlKey)
 			return [];
+		if (key === 27)
+			return [this.prepareRemoveCaretsEvent()];
 		if (key === 90 && e.ctrlKey)
 			return [this.prepareUndoEvent()];
 		if (key === 89 && e.ctrlKey)
