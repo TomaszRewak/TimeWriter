@@ -13,8 +13,12 @@ export default class EventFactory {
 			return [this.prepareMoveLeftEvent(e.ctrlKey, e.shiftKey)];
 		if (key === 39)
 			return [this.prepareMoveRightEvent(e.ctrlKey, e.shiftKey)];
+		if (key === 38 && e.altKey && e.shiftKey)
+			return [this.prepareAddCaretAboveEvent()];
 		if (key === 38)
 			return [this.prepareMoveUpEvent(e.shiftKey)];
+		if (key === 40 && e.altKey && e.shiftKey)
+			return [this.prepareAddCaretBelowEvent()];
 		if (key === 40)
 			return [this.prepareMoveDownEvent(e.shiftKey)];
 		if (key === 8)
@@ -32,13 +36,12 @@ export default class EventFactory {
 		return [];
 	}
 
-	prepareClickEvents(e, coordinates) {
+	prepareClickEvents(e, position) {
 		if (e.shiftKey)
-			return [this.prepareSelectEvent(coordinates)]
-		return [
-			this.prepareRemoveCaretsEvent(),
-			this.prepareAddCaretEvent(coordinates)
-		]
+			return [this.prepareSelectEvent(position)]
+		if (e.ctrlKey)
+			return [this.prepareAddCaretEvent(position)];
+		return [this.prepareRemoveCaretsEvent(), this.prepareAddCaretEvent(position)];
 	}
 
 	prepareUndoEvent() {
@@ -77,15 +80,23 @@ export default class EventFactory {
 		return { type: 'insert', text };
 	}
 
-	prepareAddCaretEvent(coordinates) {
-		return { type: 'manage-carets', operation: 'add-caret', coordinates };
+	prepareAddCaretEvent(position) {
+		return { type: 'manage-carets', operation: 'add-caret', placement: 'position', position };
+	}
+
+	prepareAddCaretAboveEvent() {
+		return { type: 'manage-carets', operation: 'add-caret', placement: 'above' };
+	}
+
+	prepareAddCaretBelowEvent() {
+		return { type: 'manage-carets', operation: 'add-caret', placement: 'below' };
 	}
 
 	prepareRemoveCaretsEvent() {
 		return { type: 'manage-carets', operation: 'remove-carets' };
 	}
 
-	prepareSelectEvent(coordinates) {
-		return { type: 'manage-carets', operation: 'select', coordinates };
+	prepareSelectEvent(position) {
+		return { type: 'manage-carets', operation: 'select', position };
 	}
 }

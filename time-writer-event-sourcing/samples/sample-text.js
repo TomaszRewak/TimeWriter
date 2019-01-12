@@ -8,7 +8,7 @@ export default class MyComponent extends Component {
 	}
 
 	click() {
-		console.log('Hellow world');
+		console.log('Hello world');
 	}
 
 	render() {

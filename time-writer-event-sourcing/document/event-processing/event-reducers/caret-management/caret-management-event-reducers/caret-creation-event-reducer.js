@@ -13,7 +13,7 @@ export default class CaretCreationEventReducer {
 	}
 
 	_reduceCarets(document, event) {
-		const position = this._textNavigationService.getCaretPosition(document.text, event.coordinates);
+		const position = this._textNavigationService.clipPosition(event.position, document.text);
 
 		return [
 			...document.carets,

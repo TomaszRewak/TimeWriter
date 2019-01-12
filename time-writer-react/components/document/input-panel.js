@@ -49,7 +49,7 @@ export default class InputPanel extends Component {
 	}
 
 	mouseDown(e) {
-		const mousePosition = this._getMouseCoordinates(e);
+		const mousePosition = this._getMousePosition(e);
 		const events = this._eventFactory.prepareClickEvents(e, mousePosition);
 
 		for (const event of events)
