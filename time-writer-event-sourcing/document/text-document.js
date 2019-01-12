@@ -32,4 +32,8 @@ export default class TextDocument {
 
 		console.dir(this.history);
 	}
+
+	updateTimestamp(event, timestamp) {
+		return this._eventStore.updateTimestamp(event, timestamp);
+	}
 }

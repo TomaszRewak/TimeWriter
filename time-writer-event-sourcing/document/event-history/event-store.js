@@ -3,30 +3,24 @@ import EventStoreRepair from "./event-store-repair";
 import EventStoreState from "./event-store-state";
 import EventStoreCleanup from "./event-store-cleanup";
 import EventStoreValidation from "./event-store-validation";
+import EventStoreRetrospector from "./event-store-retrospector";
+import EventStoreChainReducer from "./event-store-chain-reducer";
 
 export default class EventStore {
 	constructor(history) {
 		this._chain = history;
 
 		this._eventReducer = new EventReducer();
+		this._eventStoreChainReducer = new EventStoreChainReducer();
 		this._eventStoreRepair = new EventStoreRepair();
 		this._eventStoreState = new EventStoreState();
 		this._eventStoreCleanup = new EventStoreCleanup();
 		this._eventStoreValidation = new EventStoreValidation();
-	}
-
-	_reduceChain(event) {
-		return [
-			{
-				event,
-				state: null
-			},
-			...this._chain			
-		];
+		this._eventStoreRetrospector = new EventStoreRetrospector();
 	}
 
 	add(event) {
-		const newChain = this._reduceChain(event)
+		const newChain = this._eventStoreChainReducer.addEvent(this._chain, event)
 
 		try {
 			this._eventStoreRepair.fix(newChain);
@@ -34,7 +28,7 @@ export default class EventStore {
 			this._eventStoreCleanup.cleanup(newChain);
 			this._eventStoreValidation.validate(newChain);
 		}
-		catch(e) {
+		catch (e) {
 			console.dir(e);
 			return false;
 		}
@@ -42,6 +36,26 @@ export default class EventStore {
 		this._chain = newChain;
 
 		return true;
+	}
+
+	updateTimestamp(event, timestamp) {
+		try {
+			if (this._eventStoreRetrospector.tryUpdateTimestamp(this._chain, event, timestamp))
+				return true;
+
+			console.log('Updating chain');
+
+			this._chain = this._eventStoreChainReducer.removeEvent(this._chain, event);
+
+			return this.add({
+				...event,
+				timestamp
+			});
+		}
+		catch (e) {
+			console.dir(e);
+			return false;
+		}
 	}
 
 	get history() {

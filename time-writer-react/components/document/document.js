@@ -51,25 +51,37 @@ class Document extends Component {
 	}
 
 	sendEvent(event) {
-		event = {
+		const potentialCommunicationDelay = 1000;
+		const reducedEvent = {
 			...event,
-			timestamp: Date.now()
+			timestamp: Date.now() + potentialCommunicationDelay
 		}
 
-		this.applyEvent(event);
-		this._socket.emit('document change', event, success => {
-			if (!success)
-				this.reload(); // TODO: Needs to be implemented.
+		this.applyEvent(reducedEvent);
+		this._socket.emit('document change', reducedEvent, timestamp => {
+			if (!timestamp || !this._textDocument.updateTimestamp(reducedEvent, timestamp))
+				this.reload();
+
+			this.updateState();
 		});
 	}
 
-	applyEvent(event, timestamp = null) {
+	applyEvent(event) {
 		this._textDocument.addEvent(event);
 
-		this.setState({
-			document: this._textDocument.state,
-			history: this._textDocument.history
-		});
+		this.updateState();
+	}
+
+	updateState() {
+		if (this.state.history !== this._textDocument.history)
+			this.setState({
+				document: this._textDocument.state,
+				history: this._textDocument.history
+			});
+	}
+
+	reload() {
+		console.log('=======================TODO=====================')
 	}
 
 	render() {

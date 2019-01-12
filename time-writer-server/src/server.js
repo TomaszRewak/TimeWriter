@@ -30,29 +30,33 @@ io.on('connection', socket => {
 
 	const document = documentRepository.getDocument(documentId);
 
-	const add = (event) => {
-		const signedEvent = {
+	const prepareEvent = (event) => {
+		return {
 			...event,
+			timestamp: Date.now(),
 			author: socket.id
 		};
+	}
 
-		document.addEvent(signedEvent);
-		socket.broadcast.to(documentId).emit('document change', signedEvent);
+	const add = (event) => {
+		document.addEvent(event);
+		socket.broadcast.to(documentId).emit('document change', event);
 	};
 
 	socket.on('document change', (event, callback) => {
 		try {
+			event = prepareEvent(event);
 			add(event);
-			callback(true);
+			callback(event.timestamp);
 		}
 		catch (e) {
-			callback(false);
+			callback(null);
 		}
 	});
 
 	socket.on('disconnect', function () {
 		console.log('Got disconnected!');
-		add({ type: 'manage-carets', operation: 'remove-carets', timestamp: Date.now() });
+		add(prepareEvent({ type: 'manage-carets', operation: 'remove-carets' }));
 	});
 });
 
