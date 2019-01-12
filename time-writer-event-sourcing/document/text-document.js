@@ -1,4 +1,5 @@
 ﻿import EventStore from "./event-history/event-store";
+import { sampleText } from "../samples/sample-text"
 
 export default class TextDocument {
 	constructor(history) {
@@ -7,10 +8,10 @@ export default class TextDocument {
 				{
 					event: {
 						timestamp: Date.now()
-					},				
+					},
 					state: {
 						carets: [],
-						text: ''
+						text: sampleText
 					}
 				}
 			];
