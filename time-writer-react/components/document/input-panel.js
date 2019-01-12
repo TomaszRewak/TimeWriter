@@ -101,8 +101,6 @@ export default class InputPanel extends Component {
 	}
 
 	render() {
-		console.log('aaa');
-
 		return (
 			<div className="input-panel">
 				<div
@@ -125,6 +123,7 @@ export default class InputPanel extends Component {
 	_copySelectedText(e) {
 		const selectedText = this.props
 			.carets
+			.filter(caret => !caret.owner)
 			.map(caret => this.props.text.substring(Math.min(caret.beginPosition, caret.endPosition), Math.max(caret.beginPosition, caret.endPosition)))
 			.join('');
 
