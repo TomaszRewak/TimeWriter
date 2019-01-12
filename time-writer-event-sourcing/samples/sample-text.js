@@ -18,7 +18,6 @@ export default class MyComponent extends Component {
 			</div>
 		);
 	}
-}
-`;
+}`;
 
 export { sampleText };

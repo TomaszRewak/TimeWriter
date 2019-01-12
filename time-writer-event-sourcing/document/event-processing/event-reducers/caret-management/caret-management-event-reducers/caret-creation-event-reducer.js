@@ -16,6 +16,8 @@ export default class CaretCreationEventReducer {
 		switch (event.placement) {
 			case 'position':
 				return this._addCaretOnPosition(document, event);
+			case 'all':
+				return this._addCaretOnAll(document, event);
 			case 'above':
 				return this._addCaretsVertically(document, event, -1);
 			case 'below':
@@ -32,6 +34,18 @@ export default class CaretCreationEventReducer {
 				owner: event.author,
 				beginPosition: position,
 				endPosition: position,
+				lastOperation: 'creation'
+			}
+		];
+	}
+
+	_addCaretOnAll(document, event) {
+		return [
+			...document.carets,
+			{
+				owner: event.author,
+				beginPosition: 0,
+				endPosition: document.text.length,
 				lastOperation: 'creation'
 			}
 		];

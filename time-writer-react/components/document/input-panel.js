@@ -16,29 +16,8 @@ export default class InputPanel extends Component {
 		this.mouseDown = this.mouseDown.bind(this);
 		this.mouseUp = this.mouseUp.bind(this);
 		this.paste = this.paste.bind(this);
-	}
-
-	_getCharacterSize() {
-		return {
-			width: this.caretsPreview.current.offsetWidth,
-			height: this.caretsPreview.current.offsetHeight,
-		}
-	}
-
-	_getMouseCoordinates(e) {
-		const rect = e.target.getBoundingClientRect();
-		const characterSize = this._getCharacterSize();
-
-		return {
-			line: Math.floor((e.clientY - rect.top) / characterSize.height),
-			column: Math.round((e.clientX - rect.left) / characterSize.width)
-		};
-	}
-
-	_getMousePosition(e) {
-		const coordinates = this._getMouseCoordinates(e);
-
-		return this._textNavigationService.getCaretPosition(this.props.text, coordinates);
+		this.copy = this.copy.bind(this);
+		this.cut = this.cut.bind(this);
 	}
 
 	keyDown(e) {
@@ -73,6 +52,17 @@ export default class InputPanel extends Component {
 		this.props.onNewEvent(event);
 	}
 
+	copy(e) {
+		this._copySelectedText(e);
+	}
+
+	cut(e) {
+		this._copySelectedText(e);
+
+		const event = this._eventFactory.prepareDeleteEvent();
+		this.props.onNewEvent(event);
+	}
+
 	render() {
 		return (
 			<div className="input-panel">
@@ -81,10 +71,45 @@ export default class InputPanel extends Component {
 					onKeyDown={this.keyDown}
 					onMouseDown={this.mouseDown}
 					onMouseUp={this.mouseUp}
-					onPaste={this.paste}>
+					onPaste={this.paste}
+					onCopy={this.copy}
+					onCut={this.cut}>
 				</div>
 				<div className="character-template" ref={this.caretsPreview} />
 			</div>
 		);
+	}
+
+	_copySelectedText(e) {
+		const selectedText = this.props
+			.carets
+			.map(caret => this.props.text.substring(Math.min(caret.beginPosition, caret.endPosition), Math.max(caret.beginPosition, caret.endPosition)))
+			.join();
+			
+		e.clipboardData.setData('text/plain', selectedText);
+		e.preventDefault();
+	}
+
+	_getCharacterSize() {
+		return {
+			width: this.caretsPreview.current.offsetWidth,
+			height: this.caretsPreview.current.offsetHeight,
+		}
+	}
+
+	_getMouseCoordinates(e) {
+		const rect = e.target.getBoundingClientRect();
+		const characterSize = this._getCharacterSize();
+
+		return {
+			line: Math.floor((e.clientY - rect.top) / characterSize.height),
+			column: Math.round((e.clientX - rect.left) / characterSize.width)
+		};
+	}
+
+	_getMousePosition(e) {
+		const coordinates = this._getMouseCoordinates(e);
+
+		return this._textNavigationService.getCaretPosition(this.props.text, coordinates);
 	}
 }

@@ -31,6 +31,7 @@ export default class DeletionEventPreProcessor {
 			return this._textNavigationService.getNextFastPosition(document.text, caret.endPosition)
 		if (event.mode == 'forward')
 			return caret.beginPosition + 1;
+		return caret.endPosition;
 	}
 
 	_clipPosition(document, position) {

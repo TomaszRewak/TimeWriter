@@ -1,4 +1,4 @@
-import './native/scrolling';
+import './native/preventing-events';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

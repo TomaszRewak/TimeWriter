@@ -96,7 +96,7 @@ class Document extends Component {
 						<div className="document-content">
 							<Carets text={this.state.document.text} carets={this.state.document.carets} />
 							<Lines text={this.state.document.text} />
-							<InputPanel text={this.state.document.text} onNewEvent={this.sendEvent} />
+							<InputPanel text={this.state.document.text} carets={this.state.document.carets} onNewEvent={this.sendEvent} />
 						</div>
 					</div>
 				</div>

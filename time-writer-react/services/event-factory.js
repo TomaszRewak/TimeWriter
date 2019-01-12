@@ -5,6 +5,8 @@ export default class EventFactory {
 
 		if (key === 86 && e.ctrlKey)
 			return [];
+		if (e.keyCode == 83 && e.ctrlKey)
+			return [];
 		if (key === 27)
 			return [this.prepareRemoveCaretsEvent()];
 		if (key === 90 && e.ctrlKey)
@@ -27,6 +29,12 @@ export default class EventFactory {
 			return [this.prepareBackwardDeleteEvent(e.ctrlKey)];
 		if (key === 46)
 			return [this.prepareForwardDeleteEvent(e.ctrlKey)];
+		if (key === 65 && e.ctrlKey)
+			return [this.prepareRemoveCaretsEvent(), this.prepareSelectAllEvent()];
+		if (key === 67 && e.ctrlKey)
+			return [];
+		if (key === 88 && e.ctrlKey)
+			return [];
 		if (key === 13)
 			return [this.prepareInsertEvent('\n')];
 		if (key === 9)
@@ -70,6 +78,10 @@ export default class EventFactory {
 		return { type: 'navigate', mode: 'move-vertically', direction: 'down', select: !!select };
 	}
 
+	prepareDeleteEvent() {
+		return { type: 'delete', mode: 'simple' };
+	}
+
 	prepareBackwardDeleteEvent(fast) {
 		return { type: 'delete', mode: 'backward', fast: !!fast };
 	}
@@ -100,5 +112,9 @@ export default class EventFactory {
 
 	prepareSelectEvent(position) {
 		return { type: 'manage-carets', operation: 'select', position };
+	}
+
+	prepareSelectAllEvent() {
+		return { type: 'manage-carets', operation: 'add-caret', placement: 'all' }
 	}
 }
