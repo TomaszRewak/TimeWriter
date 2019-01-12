@@ -10,7 +10,19 @@ class DocumentRepository
 	{
 		this._createIfDoesntExist(documentId);
 
-		return this._documents.get(documentId);
+		const document = this._documents.get(documentId);
+		document.lastAccess = new Date();
+
+		return document;
+	}
+
+	removeOldDocuments() {
+		const ageLimit = new Date();
+		ageLimit.setDate(ageLimit.getDate() - 3);
+
+		for (const document of this._documents.keys())
+			if (this._documents.get(document).lastAccess < ageLimit)
+				this._documents.delete(document);
 	}
 
 	_createIfDoesntExist(documentId)

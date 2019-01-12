@@ -3,6 +3,7 @@ import express from 'express';
 import socketIO from 'socket.io';
 import path from 'path';
 import cors from 'cors';
+import schedule from 'node-schedule';
 
 import documentRepository from './../documents/document-repository'
 
@@ -61,3 +62,7 @@ io.on('connection', socket => {
 });
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`));
+
+schedule.scheduleJob(/*{hour: 0, minute: 0}*/ '*/15 * * * * *', function(){
+	documentRepository.removeOldDocuments()
+});
