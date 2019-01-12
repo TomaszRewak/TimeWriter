@@ -79,10 +79,6 @@ class Document extends Component {
 			});
 	}
 
-	reload() {
-		console.log('=======================TODO=====================')
-	}
-
 	render() {
 		if (!this.state.document)
 			return <div className="loading-screen">Loading...</div>;

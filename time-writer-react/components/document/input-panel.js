@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import EventFactory from '../../services/event-factory';
 import { TextNavigationService } from '../../external/event-sourcing';
+import Carets from './carets';
 
 export default class InputPanel extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {};
 
 		this._textNavigationService = new TextNavigationService();
 		this._eventFactory = new EventFactory();
@@ -14,7 +17,9 @@ export default class InputPanel extends Component {
 
 		this.keyDown = this.keyDown.bind(this);
 		this.mouseDown = this.mouseDown.bind(this);
+		this.mouseMove = this.mouseMove.bind(this);
 		this.mouseUp = this.mouseUp.bind(this);
+		this.mouseLeave = this.mouseLeave.bind(this);
 		this.paste = this.paste.bind(this);
 		this.copy = this.copy.bind(this);
 		this.cut = this.cut.bind(this);
@@ -38,20 +43,36 @@ export default class InputPanel extends Component {
 			this.props.onNewEvent(event);
 
 		this.setState({ mouseDownPosition: mousePosition });
-		
-		//e.preventDefault();
+		this.setState({ mouseDown: true });
+	}
+
+	mouseMove(e) {
+		if (!!e.buttons !== this.state.mouseDown)
+			this.setState({ mouseDown: !!e.buttons });
+
+		if (!this.state.mouseIn)
+			this.setState({ mouseIn: true });
+
+		const mousePosition = this._getMousePosition(e);
+
+		if (this.state.mousePosition !== mousePosition)
+			this.setState({ mousePosition: mousePosition })
 	}
 
 	mouseUp(e) {
-		const mousePosition = this._getMousePosition(e);
+		this.setState({ mouseDown: false });
 
+		const mousePosition = this._getMousePosition(e);
 		if (mousePosition === this.state.mouseDownPosition)
 			return;
 
-		const event = this._eventFactory.prepareSelectEvent(mousePosition);
-		this.props.onNewEvent(event);
-		
+		this.props.onNewEvent(this._eventFactory.prepareSelectEvent(mousePosition));
+
 		e.preventDefault();
+	}
+
+	mouseLeave(e) {
+		this.setState({ mouseIn: false })
 	}
 
 	paste(e) {
@@ -70,7 +91,18 @@ export default class InputPanel extends Component {
 		this.props.onNewEvent(event);
 	}
 
+	preparePreviewCarets() {
+		if (this.state.mouseDown)
+			return this.props.carets.filter(caret => !caret.owner).map(caret => ({ ...caret, endPosition: this.state.mousePosition }));
+		else if (this.state.mouseIn)
+			return [{ beginPosition: this.state.mousePosition, endPosition: this.state.mousePosition }];
+		else
+			return [];
+	}
+
 	render() {
+		console.log('aaa');
+
 		return (
 			<div className="input-panel">
 				<div
@@ -78,11 +110,14 @@ export default class InputPanel extends Component {
 					onKeyDown={this.keyDown}
 					onMouseDown={this.mouseDown}
 					onMouseUp={this.mouseUp}
+					onMouseMove={this.mouseMove}
+					onMouseLeave={this.mouseLeave}
 					onPaste={this.paste}
 					onCopy={this.copy}
 					onCut={this.cut}>
 				</div>
 				<div className="character-template" ref={this.caretsPreview}>0</div>
+				<Carets text={this.props.text} carets={this.preparePreviewCarets()} />
 			</div>
 		);
 	}
@@ -109,7 +144,6 @@ export default class InputPanel extends Component {
 	_getMouseCoordinates(e) {
 		const rect = e.target.getBoundingClientRect();
 		const characterSize = this._getCharacterSize();
-		console.dir(characterSize)
 
 		return {
 			line: Math.floor((e.clientY - rect.top) / characterSize.height),
