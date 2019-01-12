@@ -97,8 +97,8 @@
 	position: relative;
 }
 
-.workspace-bar-info>.me>img {
-	height: 150px;
+.workspace-bar-info>.me>.me-popup {
+	width: 150px;
 	position: absolute;
 	right: 0;
 	top: 0;
@@ -107,14 +107,29 @@
 	transition-duration: 1s;
 	pointer-events: none;
 	box-shadow: 0 0 10px 0px #131313;
+	background: #1f1f1f;
+	display: flex;
+    flex-direction: column;
 }
 
-.workspace-bar-info>.me:hover>img {
-	height: 150px;
+.workspace-bar-info>.me:hover>.me-popup {
+	width: 150px;
 	position: absolute;
 	z-index: 3;
 	opacity: 1;
 	top: 100%;
+}
+
+.workspace-bar-info>.me>.me-popup>img {
+	width: 150px;
+}
+
+.workspace-bar-info>.me>.me-popup>span {
+	width: 100%;
+    text-align: center;
+    font-size: 13px;
+    margin: 10px 0 0 0;
+	color: white;
 }
 
 .workspace-bar-info>a {

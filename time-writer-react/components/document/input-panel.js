@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import EventFactory from '../../services/event-factory';
-import Carets from './carets';
 import { TextNavigationService } from '../../external/event-sourcing';
 
 export default class InputPanel extends Component {
@@ -10,7 +9,8 @@ export default class InputPanel extends Component {
 		this._textNavigationService = new TextNavigationService();
 		this._eventFactory = new EventFactory();
 
-		this.caretsPreview = React.createRef()
+		this.caretsPreview = React.createRef();
+		this.inputInterceptor = React.createRef();
 
 		this.keyDown = this.keyDown.bind(this);
 		this.mouseDown = this.mouseDown.bind(this);
@@ -67,7 +67,7 @@ export default class InputPanel extends Component {
 		return (
 			<div className="input-panel">
 				<div
-					className="input-interceptor" tabIndex="0"
+					className="input-interceptor" tabIndex="0" ref={this.inputInterceptor}
 					onKeyDown={this.keyDown}
 					onMouseDown={this.mouseDown}
 					onMouseUp={this.mouseUp}
@@ -85,7 +85,7 @@ export default class InputPanel extends Component {
 			.carets
 			.map(caret => this.props.text.substring(Math.min(caret.beginPosition, caret.endPosition), Math.max(caret.beginPosition, caret.endPosition)))
 			.join();
-			
+
 		e.clipboardData.setData('text/plain', selectedText);
 		e.preventDefault();
 	}

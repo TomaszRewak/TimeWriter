@@ -29,8 +29,6 @@ export default class TextDocument {
 
 	addEvent(event) {
 		this._eventStore.add(event);
-
-		console.dir(this.history);
 	}
 
 	updateTimestamp(event, timestamp) {

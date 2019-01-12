@@ -6,16 +6,17 @@ import Carets from './carets';
 import Lines from './lines';
 import LineNumbers from './line-numbers';
 import { TextDocument } from '../../external/event-sourcing';
-import SocketIO from 'socket.io-client';
 import Logs from '../logging/logs';
 import InputPanel from './input-panel';
 import EventFactory from '../../services/event-factory';
+import ServerConnection from '../../services/server-connection';
 
 class Document extends Component {
 	constructor(props) {
 		super(props);
 
 		this._eventFactory = new EventFactory();
+		this._serverConnection = new ServerConnection(this.props.id);
 
 		this.state = {
 			document: null,
@@ -26,28 +27,26 @@ class Document extends Component {
 	}
 
 	async componentDidMount() {
-		const documentId = this.props.id;
-
-		const serverUrl = `http://localhost:1337`;
-		//const serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
-
-		const response = await fetch(`${serverUrl}/document/${documentId}`);
-		const currentState = await response.json();
-
-		this._textDocument = new TextDocument(currentState);
-
-		this.setState({ document: this._textDocument.state, history: this._textDocument.history });
-
-		this._socket = SocketIO(`${serverUrl}?document=${documentId}`);
-		this._socket.on('document change', event => {
-			this.applyEvent(event);
-		});
-
-		//this.sendEvent(this._eventFactory.prepareAddCaretEvent({ line: 0, column: 0 }));
+		await this.load();
+		this.connectToSocket();		
 	}
 
 	componentWillUnmount() {
 		this._socket.disconnect()
+	}
+
+	async load() {
+		const currentState = await this._serverConnection.getCurrentState();
+		this._textDocument = new TextDocument(currentState);
+
+		this.setState({ document: this._textDocument.state, history: this._textDocument.history });
+	}
+
+	connectToSocket() {
+		this._socket = this._serverConnection.createSocket();
+		this._socket.on('document change', event => {
+			this.applyEvent(event);
+		});
 	}
 
 	sendEvent(event) {
@@ -60,7 +59,7 @@ class Document extends Component {
 		this.applyEvent(reducedEvent);
 		this._socket.emit('document change', reducedEvent, timestamp => {
 			if (!timestamp || !this._textDocument.updateTimestamp(reducedEvent, timestamp))
-				this.reload();
+				this.load();
 
 			this.updateState();
 		});

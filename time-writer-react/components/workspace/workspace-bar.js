@@ -22,9 +22,13 @@ export default class WorkspaceBar extends Component {
 				</div>
 				<div className='workspace-bar-info'>
 					<a href="https://github.com/TomaszRewak/TimeWriter" target="_blank">github</a>
+					<a href="https://www.linkedin.com/in/tomaszrewak/" target="_blank">linkedIn</a>
 					<div className="me">
 						ⓘ
-						<img src="me.png" title="ale fruwa" />
+						<div className="me-popup">
+							<img src="me.png" title="ale fruwa" />
+							<span>By Tomasz Rewak</span>
+						</div>
 					</div>
 				</div>
 			</div>
