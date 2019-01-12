@@ -82,7 +82,7 @@ export default class InputPanel extends Component {
 					onCopy={this.copy}
 					onCut={this.cut}>
 				</div>
-				<div className="character-template" ref={this.caretsPreview} />
+				<div className="character-template" ref={this.caretsPreview}>0</div>
 			</div>
 		);
 	}
@@ -98,15 +98,18 @@ export default class InputPanel extends Component {
 	}
 
 	_getCharacterSize() {
+		const rect = this.caretsPreview.current.getBoundingClientRect()
+
 		return {
-			width: this.caretsPreview.current.offsetWidth,
-			height: this.caretsPreview.current.offsetHeight,
+			width: rect.width,
+			height: rect.height,
 		}
 	}
 
 	_getMouseCoordinates(e) {
 		const rect = e.target.getBoundingClientRect();
 		const characterSize = this._getCharacterSize();
+		console.dir(characterSize)
 
 		return {
 			line: Math.floor((e.clientY - rect.top) / characterSize.height),
