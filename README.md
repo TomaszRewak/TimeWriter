@@ -1,4 +1,4 @@
-# Text writer
+# Text sourcing
 An online collaborative text editor based on event sourcing architecture.
 
 Working example can be found here: https://text-sourcing.tomasz-rewak.com/
