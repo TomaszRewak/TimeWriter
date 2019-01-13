@@ -8,7 +8,7 @@ export default class EventFactory {
 		if (e.keyCode == 83 && e.ctrlKey)
 			return [];
 		if (key === 27)
-			return [this.prepareRemoveCaretsEvent()];
+			return [this.prepareRemoveAdditionalCaretsEvent()];
 		if (key === 90 && e.ctrlKey)
 			return [this.prepareUndoEvent()];
 		if (key === 89 && e.ctrlKey)
@@ -112,6 +112,10 @@ export default class EventFactory {
 
 	prepareRemoveCaretsEvent() {
 		return { type: 'manage-carets', operation: 'remove-carets' };
+	}
+
+	prepareRemoveAdditionalCaretsEvent() {
+		return { type: 'manage-carets', operation: 'remove-carets', leaveFirst: true };
 	}
 
 	prepareSelectEvent(position) {
