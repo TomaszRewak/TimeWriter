@@ -12,6 +12,7 @@ class SocketConnection {
 	_initialize() {
 		this._socket.join(this._documentId);
 
+		this._socket.emit('document snapshot', this._document.history);
 		this._socket.on('document change', this._onDocumentChanged.bind(this));
 		this._socket.on('disconnect', this._onDisconected.bind(this));
 	}

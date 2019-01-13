@@ -7,15 +7,12 @@ export default class ServerConnection {
 		this._documentId = documentId;
 	}
 
-	async connect(documentChange) {
+	connect(documentSnapshot, documentChange) {
 		this.disconnect();
 
-		const state = await this._getCurrentState();
-
 		this._socket = this._createSocket();
+		this._socket.on('document snapshot', documentSnapshot);
 		this._socket.on('document change', documentChange);
-
-		return state;
 	}
 
 	disconnect() {
@@ -30,7 +27,7 @@ export default class ServerConnection {
 		this._socket.emit('document change', event, timestamp => callback(event, timestamp));
 	}
 
-	async _getCurrentState() {
+	async getCurrentState() {
 		const response = await fetch(`${this._serverUrl}/document/${this._documentId}`);
 		const currentState = await response.json();
 

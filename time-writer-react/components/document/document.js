@@ -24,6 +24,7 @@ class Document extends Component {
 		}
 
 		this.sendEvent = this.sendEvent.bind(this);
+		this.applySnapshot = this.applySnapshot.bind(this);
 		this.applyEvent = this.applyEvent.bind(this);
 		this.updateEvent = this.updateEvent.bind(this);
 	}
@@ -36,11 +37,13 @@ class Document extends Component {
 		this._serverConnection.disconnect()
 	}
 
-	async reconnect() {
-		const currentState = await this._serverConnection.connect(this.applyEvent);
-		this._textDocument = new TextDocument(currentState);
+	reconnect() {
+		this._serverConnection.disconnect();
 
+		this._textDocument = null;
 		this.updateState();
+
+		this._serverConnection.connect(this.applySnapshot, this.applyEvent);
 	}
 
 	sendEvent(event) {
@@ -62,14 +65,24 @@ class Document extends Component {
 		this.updateState();
 	}
 
+	applySnapshot(snapshot) {
+		this._textDocument = new TextDocument(snapshot);
+		this.updateState();
+	}
+
 	applyEvent(event) {
+		if (!this._textDocument)
+			return;
+
 		const success = this._textDocument.addEvent(event);
 		this.updateState();
 		return success;
 	}
 
 	updateState() {
-		if (this.state.history !== this._textDocument.history)
+		if (!this._textDocument)
+			this.setState({ document: null, history: [] });
+		else if (this.state.history !== this._textDocument.history)
 			this.setState({
 				document: this._textDocument.state,
 				history: this._textDocument.history
