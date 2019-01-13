@@ -31,6 +31,7 @@ export default class CaretRemovalEventReducer {
 		const position = Math.min(...ownCarets.map(caret => caret.endPosition));
 
 		return [{
+			owner: event.author,
 			beginPosition: position,
 			endPosition: position,
 			lastOperation: 'creation'

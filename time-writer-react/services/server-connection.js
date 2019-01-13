@@ -3,7 +3,7 @@ import SocketIO from 'socket.io-client';
 export default class ServerConnection {
 	constructor(documentId) {
 		this._serverUrl = `http://localhost:1337`;
-		//this._serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
+		//this._serverUrl = `https://api.text-sourcing.tomasz-rewak.com`;
 		this._documentId = documentId;
 	}
 
