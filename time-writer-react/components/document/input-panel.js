@@ -53,10 +53,10 @@ export default class InputPanel extends Component {
 		if (!this.state.mouseIn)
 			this.setState({ mouseIn: true });
 
-		const mousePosition = this._getMousePosition(e);
+		const mouseCoordinates = this._getMouseCoordinates(e);
 
-		if (this.state.mousePosition !== mousePosition)
-			this.setState({ mousePosition: mousePosition })
+		if (!this._textNavigationService.compareCoordinates(mouseCoordinates, this.state.mouseCoordinates))
+			this.setState({ mouseCoordinates: mouseCoordinates });
 	}
 
 	mouseUp(e) {
@@ -92,10 +92,15 @@ export default class InputPanel extends Component {
 	}
 
 	preparePreviewCarets() {
+		if (!this.props.text || !this.state.mouseCoordinates)
+			return [];
+
+		const mousePosition = this._textNavigationService.getCaretPosition(this.props.text, this.state.mouseCoordinates);
+
 		if (this.state.mouseDown)
-			return this.props.carets.filter(caret => !caret.owner).map(caret => ({ ...caret, endPosition: this.state.mousePosition }));
+			return this.props.carets.filter(caret => !caret.owner).map(caret => ({ ...caret, endPosition: mousePosition }));
 		else if (this.state.mouseIn)
-			return [{ beginPosition: this.state.mousePosition, endPosition: this.state.mousePosition }];
+			return [{ beginPosition: mousePosition, endPosition: mousePosition }];
 		else
 			return [];
 	}

@@ -112,6 +112,10 @@
 		return Math.max(0, Math.min(text.length, position));
 	}
 
+	compareCoordinates(a, b) {
+		return a === b || !!a && !!b && a.column === b.column && a.line == b.line;
+	}
+
 	_getCharacterWidth(character, column) {
 		switch (character) {
 			case '\t': return Math.ceil((column + 1) / 4) * 4 - column;
