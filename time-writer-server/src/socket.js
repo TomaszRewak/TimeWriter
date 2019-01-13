@@ -12,7 +12,7 @@ class SocketConnection {
 	_initialize() {
 		this._socket.join(this._documentId);
 
-		this._socket.on('document change', this._onDocumentChanged.bind(this));	
+		this._socket.on('document change', this._onDocumentChanged.bind(this));
 		this._socket.on('disconnect', this._onDisconected.bind(this));
 	}
 
@@ -25,23 +25,29 @@ class SocketConnection {
 	}
 
 	_addEvent(event) {
-		event = this._prepareEvent(event);
+		const preparedEvent = this._prepareEvent(event);
+		const success = this._document.addEvent(preparedEvent)
 
-		this._document.addEvent(event);
+		if (!success)
+			return null;
+
+		this._broadcastEvent(preparedEvent);
+		return preparedEvent.timestamp;
+	};
+
+	_broadcastEvent(event) {
 		this._socket
 			.broadcast
 			.to(this._documentId)
 			.emit('document change', event);
-
-		return event;
-	};
+	}
 
 	_onDocumentChanged(event, callback) {
 		try {
-			event = this._addEvent(event);
-			callback(event.timestamp);
+			callback(this._addEvent(event));
 		}
 		catch (e) {
+			console.log(e);
 			callback(null);
 		}
 	}

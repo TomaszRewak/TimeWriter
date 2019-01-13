@@ -20,20 +20,20 @@ export default class EventStore {
 	}
 
 	add(event) {
-		const newChain = this._eventStoreChainReducer.addEvent(this._chain, event)
-
 		try {
+			const newChain = this._eventStoreChainReducer.addEvent(this._chain, event);
+
 			this._eventStoreRepair.fix(newChain);
 			this._eventStoreState.updateCurrentState(newChain);
 			this._eventStoreCleanup.cleanup(newChain);
 			this._eventStoreValidation.validate(newChain);
+
+			this._chain = newChain;
 		}
 		catch (e) {
 			console.dir(e);
 			return false;
 		}
-
-		this._chain = newChain;
 
 		return true;
 	}

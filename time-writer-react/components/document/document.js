@@ -56,7 +56,9 @@ class Document extends Component {
 			timestamp: Date.now() + potentialCommunicationDelay
 		}
 
-		this.applyEvent(reducedEvent);
+		if (!this.applyEvent(reducedEvent))
+			return;
+
 		this._socket.emit('document change', reducedEvent, timestamp => {
 			if (!timestamp || !this._textDocument.updateTimestamp(reducedEvent, timestamp))
 				this.load();
@@ -66,9 +68,9 @@ class Document extends Component {
 	}
 
 	applyEvent(event) {
-		this._textDocument.addEvent(event);
-
+		const success = this._textDocument.addEvent(event);
 		this.updateState();
+		return success;
 	}
 
 	updateState() {
