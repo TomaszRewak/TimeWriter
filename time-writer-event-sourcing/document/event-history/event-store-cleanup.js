@@ -14,10 +14,10 @@ export default class EventStoreCleanup {
 	}
 
 	_cleanupLength(chain) {
-		if (chain.length < 300)
+		if (chain.length < 400)
 			return;
 
-		chain.splice(this._closestIndexWithState(chain, 250) + 1);
+		chain.splice(this._closestIndexWithState(chain, 350) + 1);
 	}
 
 	cleanup(chain) {

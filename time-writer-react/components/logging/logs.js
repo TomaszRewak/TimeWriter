@@ -24,13 +24,18 @@ export default class Logs extends Component {
 	}
 
 	renderVisible() {
-		const logs = this.props.history.slice(0, 5).map(n => n.event);
+		const logs = this.props.history.slice(0, 7).map(n => n.event);
 		
 		return (
 			<div className="logs">
 				<a onClick={this.hideLogs}>Hide logs</a>
-				<div className="info">Displaying logs may slow down the editor.</div>
-				<div className="info">Even tho it's slow either way :D</div>
+				<div className="info">It's just a demo version, so the max length of a document is 20.000 characters and only last 350 events are stored for redo/undo operations.</div>
+				<div className="info">Also, documents are removed automatically after 3 days of inactivity.</div>
+				<div className="info">Displaying logs may slow down the editor (tho it's fun to watch :D)</div>
+				<div className="separator"/>				
+				<div className="info">{`Events in memory: ${this.props.history.length}`}</div>
+				<div className="separator"/>
+				<div className="info">7 latest events:</div>
 				{
 					logs.map((event, key) => <Log key={key} value={event} />)
 				}

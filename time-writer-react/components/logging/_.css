@@ -4,7 +4,7 @@
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	max-width: 400px;
+	max-width: 300px;
 }
 
 .logs .log {
@@ -70,9 +70,14 @@
 	border-left: 1px solid #1f1f1f;
 }
 
+.logs > .separator {
+	border-bottom: 1px solid #1f1f1f;
+	width: 100%;
+}
+
 .logs>.info {
 	color: #4a4a4a;
-	padding: 10px;
+	padding: 5px 10px;
 	font-size: 13px;
 	text-align: center;
 }
