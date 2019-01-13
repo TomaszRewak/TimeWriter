@@ -24,29 +24,23 @@ class Document extends Component {
 		}
 
 		this.sendEvent = this.sendEvent.bind(this);
+		this.applyEvent = this.applyEvent.bind(this);
+		this.updateEvent = this.updateEvent.bind(this);
 	}
 
 	async componentDidMount() {
-		await this.load();
-		this.connectToSocket();		
+		this.reconnect();
 	}
 
 	componentWillUnmount() {
-		this._socket.disconnect()
+		this._serverConnection.disconnect()
 	}
 
-	async load() {
-		const currentState = await this._serverConnection.getCurrentState();
+	async reconnect() {
+		const currentState = await this._serverConnection.connect(this.applyEvent);
 		this._textDocument = new TextDocument(currentState);
 
-		this.setState({ document: this._textDocument.state, history: this._textDocument.history });
-	}
-
-	connectToSocket() {
-		this._socket = this._serverConnection.createSocket();
-		this._socket.on('document change', event => {
-			this.applyEvent(event);
-		});
+		this.updateState();
 	}
 
 	sendEvent(event) {
@@ -56,15 +50,16 @@ class Document extends Component {
 			timestamp: Date.now() + potentialCommunicationDelay
 		}
 
-		if (!this.applyEvent(reducedEvent))
-			return;
+		if (this.applyEvent(reducedEvent))
+			this._serverConnection.sendEvent(reducedEvent, this.updateEvent);
 
-		this._socket.emit('document change', reducedEvent, timestamp => {
-			if (!timestamp || !this._textDocument.updateTimestamp(reducedEvent, timestamp))
-				this.load();
+	}
 
-			this.updateState();
-		});
+	updateEvent(event, timestamp) {
+		if (!timestamp || !this._textDocument.updateTimestamp(event, timestamp))
+			this.reconnect();
+
+		this.updateState();
 	}
 
 	applyEvent(event) {

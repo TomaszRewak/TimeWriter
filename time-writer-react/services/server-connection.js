@@ -1,24 +1,43 @@
 import SocketIO from 'socket.io-client';
 
 export default class ServerConnection {
-	constructor(documentId)
-	{		
+	constructor(documentId) {
 		this._serverUrl = `http://localhost:1337`;
 		//this._serverUrl = `http://api.text-sourcing.tomasz-rewak.com`;
 		this._documentId = documentId;
 	}
 
-	connect() {
+	async connect(documentChange) {
+		this.disconnect();
+
+		const state = await this._getCurrentState();
+
+		this._socket = this._createSocket();
+		this._socket.on('document change', documentChange);
+
+		return state;
 	}
 
-	async getCurrentState() {
+	disconnect() {
+		if (!this._socket)
+			return;
+
+		this._socket.disconnect();
+		this._socket = null;
+	}
+
+	sendEvent(event, callback) {
+		this._socket.emit('document change', event, timestamp => callback(event, timestamp));
+	}
+
+	async _getCurrentState() {
 		const response = await fetch(`${this._serverUrl}/document/${this._documentId}`);
 		const currentState = await response.json();
 
 		return currentState;
 	}
 
-	createSocket() {
+	_createSocket() {
 		return SocketIO(`${this._serverUrl}?document=${this._documentId}`);
 	}
 }
