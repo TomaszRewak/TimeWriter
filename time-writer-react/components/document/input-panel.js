@@ -33,6 +33,19 @@ export default class InputPanel extends Component {
 
 		for (const event of events)
 			this.props.onNewEvent(event);
+
+		this.keyScroll(e)
+	}
+
+	keyScroll(e) {
+		if (e.keyCode === 40 && e.ctrlKey)
+			this.props.onScroll({ vertically: +20, horizontally: 0 });
+		if (e.keyCode === 38 && e.ctrlKey)
+			this.props.onScroll({ vertically: -20, horizontally: 0 });
+		if (e.keyCode === 37 && e.ctrlKey)
+			this.props.onScroll({ vertically: 0, horizontally: -20 });
+		if (e.keyCode === 39 && e.ctrlKey)
+			this.props.onScroll({ vertically: 0, horizontally: +20 });
 	}
 
 	mouseDown(e) {

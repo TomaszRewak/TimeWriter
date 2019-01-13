@@ -36,7 +36,7 @@ const looseRules = [
 
 const strictRules = [
 	{
-		patterns: ['if', 'else', 'for', 'while', 'foreach', 'class', 'function', 'constructor', 'return', 'export', 'default', 'import', '#include', 'from', 'in', 'of'],
+		patterns: ['if', 'else', 'for', 'while', 'foreach', 'class', 'function', 'constructor', 'return', 'export', 'default', 'import', '#include', 'from', 'in', 'of', 'extends'],
 		type: 'statement'
 	},
 	{

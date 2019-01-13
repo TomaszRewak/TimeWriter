@@ -23,10 +23,13 @@ class Document extends Component {
 			history: []
 		}
 
+		this._scrollView = React.createRef();
+
 		this.sendEvent = this.sendEvent.bind(this);
 		this.applySnapshot = this.applySnapshot.bind(this);
 		this.applyEvent = this.applyEvent.bind(this);
 		this.updateEvent = this.updateEvent.bind(this);
+		this.scroll = this.scroll.bind(this);
 	}
 
 	async componentDidMount() {
@@ -89,19 +92,24 @@ class Document extends Component {
 			});
 	}
 
+	scroll(by) {
+		this._scrollView.current.scrollTop += by.vertically;
+		this._scrollView.current.scrollLeft += by.horizontally;
+	}
+
 	render() {
 		if (!this.state.document)
 			return <div className="loading-screen">Loading...</div>;
 
 		return (
 			<div className="document-scope">
-				<div className="document-scroll">
+				<div className="document-scroll" ref={this._scrollView}>
 					<div className="document" >
 						<LineNumbers text={this.state.document.text} />
 						<div className="document-content">
 							<Carets text={this.state.document.text} carets={this.state.document.carets} />
 							<Lines text={this.state.document.text} />
-							<InputPanel text={this.state.document.text} carets={this.state.document.carets} onNewEvent={this.sendEvent} />
+							<InputPanel text={this.state.document.text} carets={this.state.document.carets} onNewEvent={this.sendEvent} onScroll={this.scroll}/>
 						</div>
 					</div>
 				</div>
