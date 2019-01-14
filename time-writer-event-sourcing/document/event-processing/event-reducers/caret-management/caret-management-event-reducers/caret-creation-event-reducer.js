@@ -43,7 +43,7 @@ export default class CaretCreationEventReducer {
 		if (event.preserveExisting)
 			return carets;
 
-		return carets.filter(caret => caret.owner != caret.author);
+		return carets.filter(caret => caret.owner !== event.author);
 	}
 
 	_addCaretOnAll(document, event) {
