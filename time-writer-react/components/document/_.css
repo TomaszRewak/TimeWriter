@@ -80,7 +80,8 @@
 }
 
 .document>.document-content>.lines>.line, .document>.document-content .carets, .document>.line-numbers>.line-number {
-	height: 1.2em;
+	max-height: 1.2em;
+	min-height: 1.2em;
 }
 
 .document>.document-content>.input-panel {

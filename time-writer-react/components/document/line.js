@@ -16,7 +16,7 @@ export default class Line extends Component {
 		return this._textFormattingHelper
 			.applyFormattingRules(this.props.text)
 			.map((fragmet, index) =>
-				<span key={index} className={`text-fragment-${fragmet.type}`} style={{width: `${fragmet.width}ch`}}>
+				<span key={index} className={`text-fragment text-fragment-${fragmet.type}`} style={{maxWidth: `${fragmet.width}ch`, minWidth: `${fragmet.width}ch`}}>
 					{fragmet.text}
 				</span>);
 	}

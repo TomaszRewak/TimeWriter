@@ -1,3 +1,7 @@
+.line .text-fragment {
+    overflow: hidden;
+}
+
 .line .text-fragment-comment {
 	color: rgb(153, 185, 105);
 }

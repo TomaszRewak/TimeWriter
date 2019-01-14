@@ -13,13 +13,13 @@ const port = process.env.PORT || 1337;
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors({ origin: [/*'http://localhost:8080', */'https://text-sourcing.tomasz-rewak.com'] }));
+app.use(cors({ origin: ['http://localhost:8080', 'https://text-sourcing.tomasz-rewak.com'] }));
 app.get(['/document/:documentId'], getDocument);
 
 const server = http.Server(app);
 const io = new socketIO(server);
 
-io.origins([/*'http://localhost:8080', */'https://text-sourcing.tomasz-rewak.com:443']);
+io.origins(['http://localhost:8080', 'https://text-sourcing.tomasz-rewak.com:443']);
 io.on('connection', handleSocketConnection);
 
 server.listen(port, () => console.log(`Example app listening on port ${port}!`));

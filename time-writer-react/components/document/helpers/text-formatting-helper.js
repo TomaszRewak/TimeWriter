@@ -119,6 +119,9 @@ export default class TextFormattingHelper {
 		if (!text)
 			return [];
 
-		return [{ text: text, type: 'plain' }];
+		return [{
+			text: text.replace(/\s/, ' '),
+			type: 'plain'
+		}];
 	}
 }
