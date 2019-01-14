@@ -1,3 +1,0 @@
-﻿# TimeWriter.EventSourcing.Test
-
-
