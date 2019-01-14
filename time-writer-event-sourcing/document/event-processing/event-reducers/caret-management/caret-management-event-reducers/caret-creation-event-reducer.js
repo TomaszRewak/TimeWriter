@@ -29,7 +29,7 @@ export default class CaretCreationEventReducer {
 		const position = this._textNavigationService.clipPosition(event.position, document.text);
 
 		return [
-			...document.carets,
+			...this._processOldCarets(document.carets, event),
 			{
 				owner: event.author,
 				beginPosition: position,
@@ -37,6 +37,13 @@ export default class CaretCreationEventReducer {
 				lastOperation: 'creation'
 			}
 		];
+	}
+
+	_processOldCarets(carets, event) {
+		if (event.preserveExisting)
+			return carets;
+
+		return carets.filter(caret => caret.owner != caret.author);
 	}
 
 	_addCaretOnAll(document, event) {

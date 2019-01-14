@@ -57,9 +57,8 @@ export default class EventFactory {
 	prepareClickEvents(e, position) {
 		if (e.shiftKey)
 			return [this.prepareSelectEvent(position)]
-		if (e.ctrlKey)
-			return [this.prepareAddCaretEvent(position)];
-		return [this.prepareRemoveCaretsEvent(), this.prepareAddCaretEvent(position)];
+
+		return [this.prepareAddCaretEvent(position, e.ctrlKey)];
 	}
 
 	prepareUndoEvent() {
@@ -102,8 +101,8 @@ export default class EventFactory {
 		return { type: 'insert', text };
 	}
 
-	prepareAddCaretEvent(position) {
-		return { type: 'manage-carets', operation: 'add-caret', placement: 'position', position };
+	prepareAddCaretEvent(position, preserveExisting) {
+		return { type: 'manage-carets', operation: 'add-caret', placement: 'position', preserveExisting: !!preserveExisting, position };
 	}
 
 	prepareAddCaretAboveEvent() {
