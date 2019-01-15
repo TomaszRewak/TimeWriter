@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 
 time-writer-client/public/bundle.js
+time-writer-server/app.js
