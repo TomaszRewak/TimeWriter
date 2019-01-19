@@ -23,6 +23,7 @@ export default class WorkspaceBar extends Component {
 				<div className='workspace-bar-info'>
 					<a href="https://github.com/TomaszRewak/TimeWriter" target="_blank">github</a>
 					<a href="https://www.linkedin.com/in/tomaszrewak/" target="_blank">linkedIn</a>
+					<a href="https://blog.tomasz-rewak.com/text-sourcing/" target="_blank">about</a>
 					<div className="me">
 						ⓘ
 						<div className="me-popup">
