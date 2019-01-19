@@ -50,7 +50,7 @@ class Document extends Component {
 	}
 
 	sendEvent(event) {
-		const potentialCommunicationDelay = 1000;
+		const potentialCommunicationDelay = 1000000;
 		const reducedEvent = {
 			...event,
 			timestamp: Date.now() + potentialCommunicationDelay
