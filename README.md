@@ -3,6 +3,8 @@ An online collaborative text editor based on event sourcing architecture.
 
 Working example can be found here: https://text-sourcing.tomasz-rewak.com/
 
+A longer project description can be found here: https://blog.tomasz-rewak.com/text-sourcing/
+
 Everything here is written from a scratch: including the text editor as well as the event sourcing logic on the server and the client sides.
 
 # About the project
