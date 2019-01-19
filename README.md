@@ -1,5 +1,5 @@
 # Text sourcing
-An online collaborative text editor based on event sourcing architecture.
+An online collaborative text editor based on event sourcing.
 
 Working example can be found here: https://text-sourcing.tomasz-rewak.com/
 
@@ -15,13 +15,13 @@ All users should be even able to edit the same line without any input drops.
 This app doesn't send the entire content of the file between users after each change is made, but rather just basic events.
 Base on those events and the initial state of the document each client should be able to recreate the current state of the document.
 Event management is not only limited to simple state transformations. Event history is also used for undo/redo operations.
-The order of events is synchronized based no the server's internal clock so that the impact of communication delay can be neutralized.
+The order of events is synchronized based on the server's internal clock so that the impact of communication delay can be neutralized.
 
 # Technology
 
-This project is created using javascript (language), socket.io (for the clinet-server communication) and react (a frontend framework).
+This project is created using javascript, socket.io (for the clinet-server communication) and react (a frontend framework).
 
 # Disclaimer
 
 It's just a demo that I've created as a pet project. 
-But if you I've found any bugs in it, please, let me know.
+But if you've found any bugs, please, let me know.
